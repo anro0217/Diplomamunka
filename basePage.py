@@ -7,16 +7,10 @@ class FramelessWindow(QWidget):
         super().__init__()
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setGeometry(0, 0, 500, 800)
-        #self.setStyleSheet("background-color: #ffffff; color: #000000;")
-        self.loadStyleSheet()
+        self.setStyleSheet("background-color: #ffffff; color: #000000;")
 
     def center_window(self):
         screen_geometry = QApplication.desktop().screenGeometry()
         x = (screen_geometry.width() - self.width()) // 2
         y = (screen_geometry.height() - self.height()) // 2
         self.move(x, y)
-
-    def loadStyleSheet(self):
-        with open("gui/resources/style.qss", "r") as file:
-            self.setStyleSheet(file.read())
-

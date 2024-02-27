@@ -12,8 +12,8 @@ class QSwitch(QPushButton):
         self.setMaximumHeight(40)
 
         # Textúrák betöltése
-        self.day_pixmap = QPixmap("assets/images/day_icon.png")
-        self.night_pixmap = QPixmap("assets/images/night_icon.png")
+        self.day_pixmap = QPixmap("resources/images/day_icon.png")
+        self.night_pixmap = QPixmap("resources/images/night_icon.png")
 
     def paintEvent(self, event):
         painter = QPainter(self)

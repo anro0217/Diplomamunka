@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
 from PyQt5.QtCore import Qt
-from gui.resources.mySlider import ClickableSlider
-from gui.resources.mySwitch import QSwitch
-from gui.resources.globalSignals import globalSignals
+from resources.mySlider import ClickableSlider
+from resources.mySwitch import QSwitch
+from resources.globalSignals import globalSignals
 
 
 class SettingsPage(QWidget):
@@ -12,6 +12,7 @@ class SettingsPage(QWidget):
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
         self.initUI()
+        self.setFontSize(10)
 
     def initUI(self):
         mainLayout = QVBoxLayout(self)
@@ -44,7 +45,7 @@ class SettingsPage(QWidget):
         if self.isVisible():
             self.hide()
         else:
-            panelWidth = 200
+            panelWidth = 300
             panelHeight = mainWindowGeometry.height()
             panelX = mainWindowGeometry.x() + mainWindowGeometry.width()
             panelY = mainWindowGeometry.y()
