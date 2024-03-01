@@ -1,20 +1,19 @@
-import sqlite3
-
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QVBoxLayout, QLineEdit, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
-from basePage import FramelessWindow
+from basePage import FramelessPage
+from database.database import DatabaseManager
+from resources import loginUtils
 from resources.globalSignals import globalSignals
 
 
-class RegistrationWindow(FramelessWindow):
+class RegistrationWindow(FramelessPage):
     def __init__(self, login_window=None):
         super().__init__()
         self.login_window = login_window
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
         self.initUI()
-        self.setFontSize(10)
+        self.setFontSize(20)
 
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -82,45 +81,32 @@ class RegistrationWindow(FramelessWindow):
         self.confirm_password_field.setFont(font)
         self.register_button.setFont(font)
 
-    def register_field_test(self):
-        username = self.username_field.text()
-        email = self.email_field.text()
-        password = self.password_field.text()
-        confirm_password = self.confirm_password_field.text()
-        print(username + email + password + confirm_password)
     def register(self):
+        db_manager = DatabaseManager('database/application.db')
         username = self.username_field.text()
         email = self.email_field.text()
         password = self.password_field.text()
         confirm_password = self.confirm_password_field.text()
 
-        if password != confirm_password:
-            print("A megadott jelszavak eltérnek!")
+        if not loginUtils.is_valid_email(email):
+            print("Invalid email address!")
             return
 
-        # Adatbázis kapcsolat létrehozása
-        conn = sqlite3.connect('database/application.db')
-        c = conn.cursor()
+        if not loginUtils.is_strong_password(password):
+            print("Too weak password!")
+            return
 
-        try:
-            # Felhasználónév és email ellenőrzése
-            c.execute("SELECT * FROM users WHERE username = ? OR email = ?", (username, email))
-            if c.fetchone():
-                print("A felhasználónév vagy az email már foglalt!")
-                conn.close()
-                return
+        if password != confirm_password:
+            print("Password missmatch!")
+            return
 
-        except sqlite3.Error as e:
-            print("Adatbázis hiba:", e)
-            print("Hiba típusa:", type(e))
+        if db_manager.user_exists(username, email):
+            print("Username or email address is already used!")
+            return
 
-        # Új felhasználó hozzáadása az adatbázishoz
-        try:
-            c.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (username, email, password))
-            conn.commit()
-            print("A regisztráció sikeres!")
-        except sqlite3.Error as e:
-            print("Adatbázis hiba:", e)
-        finally:
-            conn.close()
+        hashed_password = loginUtils.hash_password(password)
 
+        if db_manager.add_user(username, email, hashed_password):
+            print("Registration successful!")
+        else:
+            print("An error occurred during registration.")

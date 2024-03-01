@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
 from PyQt5.QtCore import Qt
 from resources.mySlider import ClickableSlider
@@ -5,14 +6,14 @@ from resources.mySwitch import QSwitch
 from resources.globalSignals import globalSignals
 
 
-class SettingsPage(QWidget):
+class SettingsWindow(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent, Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnTopHint)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
         self.initUI()
-        self.setFontSize(10)
+        self.setFontSize(20)
 
     def initUI(self):
         mainLayout = QVBoxLayout(self)
@@ -24,19 +25,19 @@ class SettingsPage(QWidget):
         mainLayout.addLayout(topLayout)
 
         # Adding the font size label and slider closely
-        fontSizeLayout = QVBoxLayout()  # Creating a new vertical layout for tight spacing
-        self.fontSizeLabel = QLabel("Font size", self)
-        fontSizeLayout.addWidget(self.fontSizeLabel)
+        # fontSizeLayout = QVBoxLayout()  # Creating a new vertical layout for tight spacing
+        # self.fontSizeLabel = QLabel("Font size", self)
+        # fontSizeLayout.addWidget(self.fontSizeLabel)
 
-        self.fontSizeSlider = ClickableSlider(Qt.Horizontal, self)
-        self.fontSizeSlider.setMinimum(10)
-        self.fontSizeSlider.setMaximum(30)
-        fontSizeLayout.addWidget(self.fontSizeSlider)
+        # self.fontSizeSlider = ClickableSlider(Qt.Horizontal, self)
+        # self.fontSizeSlider.setMinimum(10)
+        # self.fontSizeSlider.setMaximum(30)
+        # fontSizeLayout.addWidget(self.fontSizeSlider)
 
-        mainLayout.addLayout(fontSizeLayout)
+        # mainLayout.addLayout(fontSizeLayout)
 
-        self.fontSizeSlider.valueChanged.connect(lambda _:
-                                                 globalSignals.fontSizeChanged.emit(self.fontSizeSlider.getValue()))
+        # self.fontSizeSlider.valueChanged.connect(lambda _:
+        #                                          globalSignals.fontSizeChanged.emit(self.fontSizeSlider.getValue()))
         self.theme_switch.clicked.connect(lambda _: globalSignals.themeChanged.emit(self.theme_switch.isChecked()))
 
         self.hide()
@@ -45,12 +46,12 @@ class SettingsPage(QWidget):
         if self.isVisible():
             self.hide()
         else:
-            panelWidth = 300
-            panelHeight = mainWindowGeometry.height()
-            panelX = mainWindowGeometry.x() + mainWindowGeometry.width()
-            panelY = mainWindowGeometry.y()
+            self.panelWidth = 300
+            self.panelHeight = mainWindowGeometry.height()
+            self.panelX = mainWindowGeometry.x() + mainWindowGeometry.width()
+            self.panelY = mainWindowGeometry.y()
 
-            self.setGeometry(panelX, panelY, panelWidth, panelHeight)
+            self.setGeometry(self.panelX, self.panelY, self.panelWidth, self.panelHeight)
             self.show()
             self.raise_()
 
@@ -63,7 +64,7 @@ class SettingsPage(QWidget):
     def setFontSize(self, size):
         font = self.font()
         font.setPointSize(size)
-        self.fontSizeLabel.setFont(font)
+        # self.fontSizeLabel.setFont(font)
 
 
 

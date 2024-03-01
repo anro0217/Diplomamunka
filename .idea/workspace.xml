@@ -5,19 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Basic login and settings page">
-      <change afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/reg_template.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/mainPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/codeEditor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/loginUtils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/day_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/day_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/night_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/night_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/settings_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/settings_dark_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/loginPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/loginPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/globalSignals.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/globalSignals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/mySlider.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mySlider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/mySwitch.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mySwitch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/style.qss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/reg_template.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/registrationPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/settingsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/settingsPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -37,7 +35,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -52,16 +50,18 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.asd.executor": "Run",
     "Python.database.executor": "Run",
     "Python.loginPage.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.mainPage.executor": "Run",
     "Python.reg_template.executor": "Run",
     "Python.registrationPage.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/HP/Desktop/Diplomamunka",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "reference.idesettings.debugger.python"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -71,7 +71,7 @@
       <recent name="C:\Users\HP\Desktop\Diplomamunka\gui" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Diplomamunka" />
       <option name="ENV_FILES" value="" />
@@ -94,6 +94,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="mainPage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Diplomamunka" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/mainPage.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.mainPage" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
