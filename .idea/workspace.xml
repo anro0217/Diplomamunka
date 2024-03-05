@@ -4,20 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Basic login and settings page">
-      <change afterPath="$PROJECT_DIR$/gui/mainPage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/codeEditor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/loginUtils.py" afterDir="false" />
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Advanced login, registration and basic mainPage added">
+      <change afterPath="$PROJECT_DIR$/TODO" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/adminPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/databaseViewer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/myPasswordField.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/loginPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/loginPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/reg_template.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/mainPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/registrationPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/settingsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/settingsPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/codeEditor.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/codeEditor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/loginUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/loginUtils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,8 +38,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/gui/loginPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gui/mainPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gui/registrationPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gui/settingsPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/main.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -57,11 +68,13 @@
     "Python.mainPage.executor": "Run",
     "Python.reg_template.executor": "Run",
     "Python.registrationPage.executor": "Run",
+    "Python.test.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/HP/Desktop/Diplomamunka",
-    "settings.editor.selected.configurable": "reference.idesettings.debugger.python"
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -94,7 +107,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="mainPage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Diplomamunka" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="userPage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Diplomamunka" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -107,7 +142,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/mainPage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\HP\Desktop\Diplomamunka\gui\userPage.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -118,7 +153,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.mainPage" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.userPage" />
       </list>
     </recent_temporary>
   </component>
@@ -146,7 +182,23 @@
       <option name="project" value="LOCAL" />
       <updated>1708970362103</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Advanced login, registration and basic mainPage added">
+      <option name="closed" value="true" />
+      <created>1709335750998</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1709335750998</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Advanced login, registration and basic mainPage added">
+      <option name="closed" value="true" />
+      <created>1709335763229</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1709335763229</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -163,7 +215,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -177,6 +229,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic login and settings page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic login and settings page" />
+    <MESSAGE value="Advanced login, registration and basic mainPage added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Advanced login, registration and basic mainPage added" />
   </component>
 </project>

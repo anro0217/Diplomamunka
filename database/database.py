@@ -21,6 +21,26 @@ class DatabaseManager:
                 password TEXT NOT NULL
             )
         ''')
+        # Feladatok táblájának létrehozása
+        c.execute('''
+                    CREATE TABLE IF NOT EXISTS tasks (
+                        id INTEGER PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        description TEXT NOT NULL,
+                        solution TEXT NOT NULL
+                    )
+                ''')
+        # Kapcsolótábla létrehozása a felhasználók és feladatok között
+        c.execute('''
+                    CREATE TABLE IF NOT EXISTS user_tasks (
+                        user_id INTEGER NOT NULL,
+                        task_id INTEGER NOT NULL,
+                        status INTEGER NOT NULL DEFAULT 0,
+                        FOREIGN KEY(user_id) REFERENCES users(id),
+                        FOREIGN KEY(task_id) REFERENCES tasks(id),
+                        PRIMARY KEY(user_id, task_id)
+                    )
+                ''')
         conn.commit()
         conn.close()
 
@@ -49,6 +69,16 @@ class DatabaseManager:
         conn.close()
         return user is not None
 
+    def get_username_by_email(self, email):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+        c.execute("SELECT username FROM users WHERE email = ?", (email,))
+        result = c.fetchone()
+        conn.close()
+        if result:
+            return result[0]
+        return None
+
     def validate_login(self, username_or_email, password):
         conn = sqlite3.connect(self.db_file)
         c = conn.cursor()
@@ -61,3 +91,33 @@ class DatabaseManager:
         if stored_password and loginUtils.check_password(stored_password[0], password):
             return True
         return False
+
+    def get_table_names(self):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+        c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = [table[0] for table in c.fetchall()]
+        conn.close()
+        return tables
+
+    def get_table_data(self, table_name):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+        c.execute(f"SELECT * FROM {table_name};")
+        data = c.fetchall()
+        conn.close()
+        return data
+
+    def add_task(self, title, description, solution):
+        try:
+            conn = sqlite3.connect(self.db_file)
+            c = conn.cursor()
+            c.execute("INSERT INTO tasks (title, description, solution) VALUES (?, ?, ?)",
+                      (title, description, solution))
+            conn.commit()
+        except sqlite3.Error as e:
+            print("Database error:", e)
+            return False
+        finally:
+            conn.close()
+        return True

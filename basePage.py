@@ -8,6 +8,12 @@ class FramelessPage(QWidget):
         self.setGeometry(0, 0, 500, 800)
         self.setStyleSheet("background-color: #ffffff; color: #000000;")
 
+    def setTheme(self, darkModeEnabled):
+        if darkModeEnabled:
+            self.setStyleSheet("background-color: #333333; color: #ffffff;")
+        else:
+            self.setStyleSheet("background-color: #ffffff; color: #000000;")
+
     def center_window(self):
         screen_geometry = QApplication.desktop().screenGeometry()
         x = (screen_geometry.width() - self.width()) // 2

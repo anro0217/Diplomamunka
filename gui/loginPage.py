@@ -1,93 +1,162 @@
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QApplication
 from basePage import FramelessPage
 from database.database import DatabaseManager
-from gui.settingsPage import SettingsWindow
+from gui.adminPage import AdminWindow
+from gui.registrationPage import RegistrationWindow
+from gui.userPage import UserWindow
 from resources import loginUtils
 from resources.globalSignals import globalSignals
+from resources.myPasswordField import PasswordLineEdit
 
 
 class LoginWindow(FramelessPage):
-    def __init__(self, registration_window=None, main_window=None):
+    def __init__(self):
         super().__init__()
-        self.registration_window = registration_window
-        self.main_window = main_window
+        self.user_window = UserWindow(self)
+        self.admin_window = AdminWindow(self)
+        self.registration_window = RegistrationWindow(self)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
+        self.setWindowModality(Qt.ApplicationModal)
+        self.show()
         self.initUI()
         self.setFontSize(20)
+        self.check_auto_login()
 
     def initUI(self):
         self.layout = QVBoxLayout(self)
 
         self.username_field = QLineEdit(self)
-        self.username_field.setPlaceholderText("Username")
-        #self.username_field.setStyleSheet("padding: 15px; border: none;")
+        self.username_field.setPlaceholderText("Username|Email")
+        self.username_field.setFixedSize(500, 45)
 
-        self.password_field = QLineEdit(self)
+        self.password_field = PasswordLineEdit()
         self.password_field.setPlaceholderText("Password")
         self.password_field.setEchoMode(QLineEdit.Password)
-        self.password_field.returnPressed.connect(self.open_main_window)
-        #self.password_field.setStyleSheet("padding: 15px; border: none;")
+        self.password_field.setFixedSize(500, 45)
+        self.password_field.returnPressed.connect(self.which_user)
+
+        self.checkBox = QCheckBox("Remember me", self)
+        self.checkBox.setFocusPolicy(Qt.StrongFocus)
+        self.checkBox.setFixedSize(500, 30)
+        self.checkBox.setStyleSheet("""
+                    QCheckBox:focus {
+                        border: none;
+                        outline: none;
+                    }""")
 
         self.loginButton = QPushButton("Login", self)
-        self.loginButton.clicked.connect(self.open_main_window)
-
-        self.remember_me_checkbox = QCheckBox("Remember me", self)
+        self.loginButton.setFixedSize(500, 50)
+        self.loginButton.clicked.connect(self.which_user)
 
         self.register_label = QLabel("Don't have an account? <a href='Sign up'>Sign up</a>", self)
         self.register_label.setAlignment(Qt.AlignCenter)
-        self.register_label.setStyleSheet('margin-top: 10px;')
+        self.register_label.setFixedSize(500, 20)
         self.register_label.linkActivated.connect(self.open_registration)
 
+        self.message_label = QLabel(self)
+        self.message_label.setStyleSheet("color: red;")
+        self.message_label.setAlignment(Qt.AlignCenter)
+        self.message_label.setFixedSize(500, 40)
+        self.message_label.hide()
+
         self.exitButton = QPushButton("Exit", self)
+        self.exitButton.setFixedSize(150, 50)
         self.exitButton.clicked.connect(QApplication.instance().quit)
 
-        # Hozzáadás sorrendjének beállítása
+        # Adding widgets to the layout in the desired order
         self.layout.addWidget(self.username_field)
         self.layout.addWidget(self.password_field)
-        self.layout.addWidget(self.remember_me_checkbox)  # Ezt ide helyezzük
+        self.layout.addWidget(self.checkBox)
         self.layout.addWidget(self.loginButton)
         self.layout.addWidget(self.register_label)
+        self.layout.addWidget(self.message_label)  # This is now below the register_label
+        self.layout.setSpacing(10)
+        self.layout.addStretch()  # This will push the exit button to the bottom
 
-        # Alsó gombok elrendezése
+        # Bottom buttons layout
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.exitButton, alignment=Qt.AlignLeft)
         button_layout.addStretch()
         self.layout.addLayout(button_layout)
 
+        # Set tab order explicitly
+        self.setTabOrder(self.username_field, self.password_field)
+        self.setTabOrder(self.password_field, self.checkBox)
+        self.setTabOrder(self.checkBox, self.loginButton)
+        self.setTabOrder(self.loginButton, self.exitButton)
+
+        self.setLayout(self.layout)
         self.center_window()
 
+    def check_auto_login(self):
+        try:
+            with open('login_state.cfg', 'r', encoding='utf-8') as f:
+                username = f.read().strip()
+                if username and '\u200B' in username:
+                    username = username.replace('\u200B', '')
+                    if username == 'admin':
+                        self.admin_window.set_user_label(username)
+                        self.admin_window.show()
+                    else:
+                        self.user_window.set_user_label(username)
+                        self.user_window.show()
+                    self.hide()
+        except FileNotFoundError:
+            pass
+
     def open_registration(self):
+        self.message_label.hide()
         self.hide()
+        self.registration_window.username_field.setText('')
+        self.registration_window.email_field.setText('')
+        self.registration_window.password_field.setText('')
+        self.registration_window.confirm_password_field.setText('')
+        self.registration_window.username_field.setFocus()
+        self.registration_window.message_label.hide()
+        self.registration_window.setWindowModality(Qt.ApplicationModal)
         self.registration_window.show()
 
-    def open_main_window(self):
-        db_manager = DatabaseManager('database/application.db')
+    def which_user(self):
         username_or_email = self.username_field.text()
         password = self.password_field.text()
+        if self.checkBox.isChecked():
+            loginUtils.save_login_state(username_or_email)
+        if username_or_email == 'admin':
+            self.login_as_admin(username_or_email, password)
+        else:
+            self.login_as_user(username_or_email, password)
+
+    def login_as_user(self, username_or_email, password):
+        db_manager = DatabaseManager('database/application.db')
         if db_manager.validate_login(username_or_email, password):
-            if self.remember_me_checkbox.isChecked():
-                # Tárold el a felhasználói adatokat
-                self.save_login_state(username_or_email)
-            self.main_window.set_user_label(username_or_email)
-            print("A bejelentkezés sikeres")
-            self.close()
+            self.open_user_window(username_or_email)
+            self.message_label.hide()
+            self.hide()
         else:
-            print("Invalid username or password!")
+            self.message_label.setText("Invalid username or password!")
+            self.message_label.setStyleSheet("color: red;")
+            self.message_label.show()
 
-    def save_login_state(self, username_or_email):
-        with open('login_state.cfg', 'w') as f:
-            f.write(username_or_email)
+    def open_user_window(self, username_or_email):
+        self.user_window.set_user_label(username_or_email)
+        self.user_window.show()
 
-    def setTheme(self, darkModeEnabled):
-        if darkModeEnabled:
-            self.setStyleSheet("background-color: #333333; color: #ffffff;")
-            self.settingsButton.setIcon(QIcon("resources/images/settings_light_icon.png"))
+    def login_as_admin(self, username_or_email, password):
+        if password == "admin_password":
+            self.open_admin_window(username_or_email)
+            self.message_label.hide()
+            self.hide()
         else:
-            self.setStyleSheet("background-color: #ffffff; color: #000000;")
-            self.settingsButton.setIcon(QIcon("resources/images/settings_dark_icon.png"))
+            self.message_label.setText("Invalid username or password!")
+            self.message_label.setStyleSheet("color: red;")
+            self.message_label.show()
+
+    def open_admin_window(self, username_or_email):
+        self.admin_window.set_user_label(username_or_email)
+        self.admin_window.show()
 
     def setFontSize(self, size):
         font = self.font()
@@ -95,5 +164,4 @@ class LoginWindow(FramelessPage):
         self.username_field.setFont(font)
         self.password_field.setFont(font)
         self.loginButton.setFont(font)
-        #self.settingsButton.setIconSize(QSize(size * 2, size * 2))
         self.exitButton.setFont(font)

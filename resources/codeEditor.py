@@ -80,13 +80,22 @@ class CodeEditor(QPlainTextEdit):
         # A LineNumberArea szélességének megszerzése
         line_number_area_width = self.line_number_area.sizeHint().width()
 
+        # A font méretének beállítása
+        font = painter.font()
+        font.setPointSize(font.pointSize() + 2)  # Állítsd be a kívánt méretre
+        painter.setFont(font)
+
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(block_number + 1)
                 painter.setPen(Qt.black)
-                # Az int konverzió hozzáadása a top változóhoz és a szélesség pontos meghatározása
-                painter.drawText(0, int(top), line_number_area_width, self.fontMetrics().height(),
-                                 Qt.AlignRight, number)
+
+                # Y pozíció számításának módosítása a szám középre igazításához
+                height = self.blockBoundingRect(block).height()
+                y_position = top + (height - painter.fontMetrics().height()) / 2
+
+                painter.drawText(0, int(y_position), line_number_area_width,
+                                 painter.fontMetrics().height(), Qt.AlignCenter, number)
 
             block = block.next()
             top = bottom
