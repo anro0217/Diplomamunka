@@ -1,14 +1,12 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QApplication
 from basePage import FramelessPage
-from database.database import DatabaseManager
 from gui.adminPage import AdminWindow
 from gui.registrationPage import RegistrationWindow
 from gui.userPage import UserWindow
-from resources import loginUtils
-from resources.globalSignals import globalSignals
-from resources.myPasswordField import PasswordLineEdit
+from resources.utils import loginUtils
+from resources.utils.globalSignals import globalSignals
+from resources.widgets.myPasswordField import PasswordLineEdit
 
 
 class LoginWindow(FramelessPage):
@@ -130,8 +128,7 @@ class LoginWindow(FramelessPage):
             self.login_as_user(username_or_email, password)
 
     def login_as_user(self, username_or_email, password):
-        db_manager = DatabaseManager('database/application.db')
-        if db_manager.validate_login(username_or_email, password):
+        if self.db_manager.validate_login(username_or_email, password):
             self.open_user_window(username_or_email)
             self.message_label.hide()
             self.hide()

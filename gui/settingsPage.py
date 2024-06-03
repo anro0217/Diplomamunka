@@ -1,9 +1,7 @@
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt5.QtCore import Qt
-from resources.mySlider import ClickableSlider
-from resources.mySwitch import QSwitch
-from resources.globalSignals import globalSignals
+from resources.widgets.mySwitch import QSwitch
+from resources.utils.globalSignals import globalSignals
 
 
 class SettingsWindow(QWidget):

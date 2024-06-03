@@ -1,10 +1,9 @@
-from PyQt5.QtWidgets import QVBoxLayout, QLineEdit, QPushButton, QLabel, QFrame, QHBoxLayout, QApplication
+from PyQt5.QtWidgets import QVBoxLayout, QLineEdit, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
 from basePage import FramelessPage
-from database.database import DatabaseManager
-from resources import loginUtils
-from resources.globalSignals import globalSignals
-from resources.myPasswordField import PasswordLineEdit
+from resources.utils import loginUtils
+from resources.utils.globalSignals import globalSignals
+from resources.widgets.myPasswordField import PasswordLineEdit
 
 
 class RegistrationWindow(FramelessPage):
@@ -32,7 +31,6 @@ class RegistrationWindow(FramelessPage):
         self.layout.addWidget(self.email_field)
 
         # Jelszó létrehozási mező
-        #self.password_field = QLineEdit()
         self.password_field = PasswordLineEdit()
         self.password_field.setPlaceholderText("Create password")
         self.password_field.setEchoMode(QLineEdit.Password)
@@ -40,7 +38,6 @@ class RegistrationWindow(FramelessPage):
         self.layout.addWidget(self.password_field)
 
         # Jelszó megerősítési mező
-        #self.confirm_password_field = QLineEdit()
         self.confirm_password_field = PasswordLineEdit()
         self.confirm_password_field.setPlaceholderText("Confirm password")
         self.confirm_password_field.setEchoMode(QLineEdit.Password)
@@ -86,7 +83,6 @@ class RegistrationWindow(FramelessPage):
         self.login_window.show()
 
     def register(self):
-        db_manager = DatabaseManager('database/application.db')
         username = self.username_field.text()
         email = self.email_field.text()
         password = self.password_field.text()
@@ -107,14 +103,14 @@ class RegistrationWindow(FramelessPage):
             self.message_label.show()
             return
 
-        if db_manager.user_exists(username, email):
+        if self.db_manager.user_exists(username, email):
             self.message_label.setText("Username or email address is already used!")
             self.message_label.show()
             return
 
         hashed_password = loginUtils.hash_password(password)
 
-        if db_manager.add_user(username, email, hashed_password):
+        if self.db_manager.add_user(username, email, hashed_password):
             self.username_field.setText('')
             self.email_field.setText('')
             self.password_field.setText('')

@@ -1,9 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtCore import Qt
 
+from database.database import DatabaseManager
+
+
 class FramelessPage(QWidget):
     def __init__(self):
         super().__init__()
+        self.db_manager = DatabaseManager('database/application.db')
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setGeometry(0, 0, 500, 800)
         self.setStyleSheet("background-color: #ffffff; color: #000000;")

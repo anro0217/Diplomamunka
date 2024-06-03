@@ -1,0 +1,63 @@
+Alapok:
+
+
+Hello, World!
+    Tananyag:
+    Az első programunk mindig egy egyszerű "Hello, World!" üzenetet jelenít meg.
+    Ezzel a programmal megismerkedhetünk a Python alapjaival és a print függvénnyel.
+
+    Feladattípus:
+    Kódírás és Ellenőrzés: Írjon egy programot, amely kiírja a saját nevét.
+
+Variables and Types
+    Tananyag:
+    A változók olyan tárolók, amelyek adatokat tárolnak.
+    A Pythonban nincs szükség a változó típusának előzetes megadására. Néhány alapvető típus: int, float, str, bool.
+
+    Feladattípus:
+    kötögetés: Párosítsa a változókat a helyes típusokkal.
+
+Basic Operators
+
+Conditions
+
+Loops
+
+String Formatting
+
+Basic String Operations
+
+Lists
+
+Dictionaries
+
+Functions
+
+Classes and Objects
+
+Modules and Packages
+
+HALADÓ:
+
+Generators
+List Comprehensions
+Lambda functions
+Multiple Function Arguments
+Regular Expressions
+Exception Handling
+Sets
+Serialization
+Partial functions
+Code Introspection
+Closures
+Decorators
+Map, Filter, Reduce
+
+Feladattípus ötletek:
+
+drag & drop -> helyes sorrendbe állítás
+megfelelők összepárosítása kötögetéssel
+kvízek
+hibakeresés
+logikai feladatok, puzzle, kirakós
+szimuláció

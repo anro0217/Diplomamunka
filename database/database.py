@@ -1,8 +1,6 @@
 import sqlite3
-import os
 
-
-from resources import loginUtils
+from resources.utils import loginUtils
 
 
 class DatabaseManager:
@@ -23,24 +21,33 @@ class DatabaseManager:
         ''')
         # Feladatok táblájának létrehozása
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS tasks (
-                        id INTEGER PRIMARY KEY,
-                        title TEXT NOT NULL,
-                        description TEXT NOT NULL,
-                        solution TEXT NOT NULL
-                    )
-                ''')
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT NOT NULL,
+                type TEXT NOT NULL,
+                code_template TEXT,
+                code_result TEXT,
+                drag_drop_items TEXT,
+                matching_pairs TEXT,
+                quiz_question TEXT,
+                quiz_options TEXT,
+                quiz_answer TEXT,
+                debugging_code TEXT,
+                correct_code TEXT
+            )
+        ''')
         # Kapcsolótábla létrehozása a felhasználók és feladatok között
         c.execute('''
-                    CREATE TABLE IF NOT EXISTS user_tasks (
-                        user_id INTEGER NOT NULL,
-                        task_id INTEGER NOT NULL,
-                        status INTEGER NOT NULL DEFAULT 0,
-                        FOREIGN KEY(user_id) REFERENCES users(id),
-                        FOREIGN KEY(task_id) REFERENCES tasks(id),
-                        PRIMARY KEY(user_id, task_id)
-                    )
-                ''')
+            CREATE TABLE IF NOT EXISTS user_tasks (
+                user_id INTEGER NOT NULL,
+                task_id INTEGER NOT NULL,
+                status INTEGER NOT NULL DEFAULT 0,
+                FOREIGN KEY(user_id) REFERENCES users(id),
+                FOREIGN KEY(task_id) REFERENCES tasks(id),
+                PRIMARY KEY(user_id, task_id)
+            )
+        ''')
         conn.commit()
         conn.close()
 
@@ -105,15 +112,27 @@ class DatabaseManager:
         c = conn.cursor()
         c.execute(f"SELECT * FROM {table_name};")
         data = c.fetchall()
-        conn.close()
-        return data
 
-    def add_task(self, title, description, solution):
+        # Oszlopcímek lekérése
+        columns = [description[0] for description in c.description]
+
+        conn.close()
+        return data, columns
+
+    def add_task(self, title, description, task_type, code_template=None, code_result=None, drag_drop_items=None,
+                 matching_pairs=None, quiz_question=None, quiz_options=None, quiz_answer=None, debugging_code=None,
+                 correct_code=None):
         try:
             conn = sqlite3.connect(self.db_file)
             c = conn.cursor()
-            c.execute("INSERT INTO tasks (title, description, solution) VALUES (?, ?, ?)",
-                      (title, description, solution))
+            c.execute('''
+                INSERT INTO tasks (title, description, type, code_template, code_result, drag_drop_items, 
+                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''',
+                      (title, description, task_type, code_template, code_result, drag_drop_items, matching_pairs,
+                       quiz_question,
+                       quiz_options, quiz_answer, debugging_code, correct_code))
             conn.commit()
         except sqlite3.Error as e:
             print("Database error:", e)
@@ -121,3 +140,70 @@ class DatabaseManager:
         finally:
             conn.close()
         return True
+
+    def get_task(self, title):
+        conn = sqlite3.connect(self.db_file)
+        conn.row_factory = sqlite3.Row  # Eredmények szótárként való visszaadása
+        c = conn.cursor()
+        c.execute('''
+            SELECT title, description, type, code_template, code_result, drag_drop_items, matching_pairs, 
+            quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+            FROM tasks WHERE title = ?
+        ''', (title,))
+        task = c.fetchone()
+        conn.close()
+        return dict(task) if task else None
+
+    def get_tasks(self):
+        conn = sqlite3.connect(self.db_file)
+        conn.row_factory = sqlite3.Row  # Eredmények szótárként való visszaadása
+        c = conn.cursor()
+        c.execute("SELECT id, title FROM tasks ORDER BY id ASC")
+        tasks = c.fetchall()
+        conn.close()
+        return [{'id': task['id'], 'title': task['title']} for task in tasks]
+
+    def get_task_by_id(self, task_id):
+        conn = sqlite3.connect(self.db_file)
+        conn.row_factory = sqlite3.Row  # Eredmények szótárként való visszaadása
+        c = conn.cursor()
+        c.execute('''
+            SELECT id, title, description, type, code_template, code_result, drag_drop_items, matching_pairs, 
+            quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+            FROM tasks WHERE id = ?
+        ''', (task_id,))
+        task = c.fetchone()
+        conn.close()
+        return dict(task) if task else None
+
+    def regenerate_ids(self):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS temp_tasks AS SELECT * FROM tasks ORDER BY id ASC''')
+        c.execute('''DELETE FROM tasks''')
+        c.execute('''UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tasks' ''')
+        c.execute('''INSERT INTO tasks (title, description, type, code_template, code_result, drag_drop_items, 
+                    matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
+                    SELECT title, description, type, code_template, code_result, drag_drop_items, 
+                    matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+                    FROM temp_tasks''')
+        c.execute('''DROP TABLE temp_tasks''')
+        conn.commit()
+        conn.close()
+
+    def delete(self, table_name, record_id):
+        try:
+            conn = sqlite3.connect(self.db_file)
+            c = conn.cursor()
+            query = f"DELETE FROM {table_name} WHERE id = ?"
+            c.execute(query, (record_id,))
+            conn.commit()
+            if table_name == "tasks":
+                self.regenerate_ids()  # Újragenerálja az ID-kat a törlés után
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            return False
+        finally:
+            conn.close()
+        return True
+

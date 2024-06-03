@@ -13,7 +13,7 @@ def get_username_field_type(input_string):
         return "username"
 
 def is_strong_password(password):
-    pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[A-Za-z\d\W]{8,}$"
+    pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s_])[A-Za-z\d\W_]{8,}$"
     return re.match(pattern, password) is not None
 
 def hash_password(password):

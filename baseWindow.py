@@ -3,12 +3,13 @@ from PyQt5.QtCore import Qt
 
 from database.database import DatabaseManager
 from gui.settingsPage import SettingsWindow
-from resources import loginUtils
+from resources.utils import loginUtils
 
 
 class FramelessWindow(QMainWindow):
     def __init__(self, login_window):
         super().__init__()
+        self.db_manager = DatabaseManager('database/application.db')
         self.login_window = login_window
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setGeometry(0, 0, 1600, 900)
@@ -43,9 +44,8 @@ class FramelessWindow(QMainWindow):
         self.login_window.show()
 
     def set_user_label(self, username_or_email):
-        db_manager = DatabaseManager('database/application.db')
         if loginUtils.is_email(username_or_email):
-            self.user_label.setText(db_manager.get_username_by_email(username_or_email))
+            self.user_label.setText(self.db_manager.get_username_by_email(username_or_email))
             self.user_label.setDisabled(True)
         else:
             self.user_label.setText(username_or_email)

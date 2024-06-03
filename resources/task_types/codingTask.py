@@ -2,9 +2,9 @@ import sys
 from contextlib import redirect_stdout
 from io import StringIO
 
-from PyQt5.QtCore import Qt, QRect, QSize
-from PyQt5.QtGui import QPainter, QTextFormat, QColor
-from PyQt5.QtWidgets import QTextEdit, QPlainTextEdit, QWidget
+from PyQt5.QtCore import QSize, Qt, QRect
+from PyQt5.QtGui import QIcon, QPainter, QTextFormat, QColor
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, QPlainTextEdit, QMessageBox
 
 
 class LineNumberArea(QWidget):
@@ -17,6 +17,7 @@ class LineNumberArea(QWidget):
 
     def paintEvent(self, event):
         self.code_editor.line_number_area_paint_event(event)
+
 
 class CodeEditor(QPlainTextEdit):
     def __init__(self):
@@ -125,3 +126,111 @@ class CodeEditor(QPlainTextEdit):
             cursor.insertText("    ")  # insert 4 spaces
         else:
             super().keyPressEvent(e)  # Ensure the base class event is called
+
+
+class CodeRunner(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.initUI()
+
+    def initUI(self):
+        self.code_editor = CodeEditor()
+        self.output_window = QPlainTextEdit()
+        self.output_window.setReadOnly(True)
+        self.output_window.setMaximumHeight(100)
+
+        self.run_button = QPushButton(QIcon('resources/images/run_button.png'), "", self)
+        self.run_button.setIconSize(QSize(50, 100))
+        self.run_button.setFixedSize(55, 100)
+        self.run_button.clicked.connect(self.run_code)
+
+        code_layout = QHBoxLayout()
+        code_layout.addWidget(self.code_editor, 2)
+
+        output_layout = QHBoxLayout()
+        output_layout.addWidget(self.run_button)
+        output_layout.addWidget(self.output_window)
+
+        layout = QVBoxLayout()
+        layout.addLayout(code_layout)
+        layout.addLayout(output_layout)
+
+        self.setLayout(layout)
+
+    def test_user_code(self, user_code, correct_function_calls):
+        # Először bontsuk részekre a megoldás mezőjét
+        sections = correct_function_calls.split('\n')
+
+        function_test_lines = []
+        other_test_lines = []
+        current_section = None
+
+        for line in sections:
+            if 'függvény teszt' in line:
+                current_section = 'function_test'
+            elif 'kiiratás' in line:
+                current_section = 'print_check'
+            else:
+                if current_section == 'function_test':
+                    function_test_lines.append(line.strip())
+                elif current_section == 'print_check':
+                    other_test_lines.append(line.strip())
+
+        # A függvényhívások és az elvárt visszatérési értékek
+        test_cases = []
+        expected_outputs = []
+
+        for call in function_test_lines:
+            if call:
+                function_call, expected_output = call.split('#')
+                test_cases.append(function_call.strip())
+                expected_outputs.append(expected_output.strip())
+
+        # A kimenet ellenőrzése
+        print_tests = []
+        for check in other_test_lines:
+            if 'print(' in check:
+                print_tests.append(check.strip())
+
+        # A felhasználó kódját futtatjuk
+        try:
+            user_namespace = {}
+            exec(user_code, user_namespace)
+
+            # Teszteljük a függvény visszatérési értékeit
+            for i, test_case in enumerate(test_cases):
+                result = eval(test_case, user_namespace)
+                expected_result = eval(expected_outputs[i])
+                if result != expected_result:
+                    return False, f"Test failed: {test_case} expected {expected_result}, but got {result}"
+
+            # Teszteljük a print outputokat
+            output = StringIO()
+            with redirect_stdout(output):
+                for test in print_tests:
+                    exec(test, user_namespace)
+            printed_output = output.getvalue().strip().split('\n')
+
+            for i, test in enumerate(print_tests):
+                test_output = eval(test[test.find('(') + 1:test.find(')')], user_namespace)
+                if str(test_output) != printed_output[i]:
+                    return False, f"Print test failed: expected {test_output}, but got {printed_output[i]}"
+
+        except Exception as e:
+            return False, str(e)
+
+        return True, "All tests passed."
+
+    def run_code(self):
+        user_code = self.code_editor.toPlainText()
+        result, message = self.test_user_code(user_code, self.task_data['code_result'])
+        self.output_window.setPlainText(message if result else f"Error: {message}")
+
+    def clear(self):
+        self.code_editor.clear()
+        self.output_window.clear()
+
+    def load_task(self, task_data):
+        self.task_data = task_data
+        self.code_editor.setPlainText(task_data['code_template'])
+        self.output_window.clear()
