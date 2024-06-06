@@ -10,11 +10,11 @@ from gui.userPage import UserWindow
 
 
 class AdminWindow(FramelessWindow):
-    def __init__(self, login_window):
+    def __init__(self, login_window, user_window):
         super().__init__(login_window)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
-        self.user_window = UserWindow(self, True)
+        self.user_window = user_window
         self.initUI()
 
     def initUI(self):

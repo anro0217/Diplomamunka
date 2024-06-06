@@ -129,8 +129,10 @@ class CodeEditor(QPlainTextEdit):
 
 
 class CodeRunner(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, db_manager, parent=None):
         super().__init__(parent)
+        self.db_manager = db_manager
+        self.parent_window = parent
         self.initUI()
 
     def initUI(self):
@@ -222,15 +224,22 @@ class CodeRunner(QWidget):
         return True, "All tests passed."
 
     def run_code(self):
-        user_code = self.code_editor.toPlainText()
-        result, message = self.test_user_code(user_code, self.task_data['code_result'])
-        self.output_window.setPlainText(message if result else f"Error: {message}")
+        self.output_window.setPlainText(self.code_editor.run_code_and_capture_output())
+        result, message = self.test_user_code(self.code_editor.toPlainText(), self.task_data['code_result'])
+        if result:
+            QMessageBox.information(self, "Correct", "Your solution is correct!")
+            if self.parent_window and not self.parent_window.is_admin:
+                self.db_manager.mark_task_as_completed(self.user_id, self.task_data['id'])
+                self.parent_window.update_lessons_list()
+        else:
+            QMessageBox.warning(self, "Incorrect", message)
 
     def clear(self):
         self.code_editor.clear()
         self.output_window.clear()
 
-    def load_task(self, task_data):
+    def load_task(self, task_data, user_id):
         self.task_data = task_data
+        self.user_id = user_id
         self.code_editor.setPlainText(task_data['code_template'])
         self.output_window.clear()

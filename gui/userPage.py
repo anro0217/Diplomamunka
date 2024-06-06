@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QPixmap, QIcon, QFont
+from PyQt5.QtGui import QPixmap, QIcon, QFont, QColor
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QMenu, QAction, QListWidget, \
     QApplication, QStackedWidget, QMessageBox, QListWidgetItem
 from baseWindow import FramelessWindow
@@ -13,22 +13,18 @@ from resources.task_types.codingTask import CodeRunner  # Import the TaskArea cl
 
 
 class UserWindow(FramelessWindow):
-    def __init__(self, login_window, is_admin=False):
+    def __init__(self, login_window, user_id=None, is_admin=False, admin_window=None):
         super().__init__(login_window)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
-        self.admin_window = login_window
+        self.admin_window = admin_window
         self.is_admin = is_admin
+        self.user_id = user_id
         self.initUI()
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.lessons_list_widget.clear()
-        tasks = self.db_manager.get_tasks()
-        for task in tasks:
-            item = QListWidgetItem(task['title'])
-            item.setData(Qt.UserRole, task['id'])  # Store the unique id
-            self.lessons_list_widget.addItem(item)
+        self.update_lessons_list()
 
     def initUI(self):
         # Lessons menu toggle button
@@ -116,15 +112,20 @@ class UserWindow(FramelessWindow):
         self.task_area = QStackedWidget()
         self.empty_widget = QWidget()
         self.task_area.addWidget(self.empty_widget)
-        self.code_runner = CodeRunner()
+
+        self.code_runner = CodeRunner(self.db_manager, parent=self)
         self.task_area.addWidget(self.code_runner)
-        self.drag_and_drop_task = DragAndDropTask()
+
+        self.drag_and_drop_task = DragAndDropTask(self.db_manager, parent=self)
         self.task_area.addWidget(self.drag_and_drop_task)
-        self.matching_task = MatchingTask()
+
+        self.matching_task = MatchingTask(self.db_manager, parent=self)
         self.task_area.addWidget(self.matching_task)
-        self.quiz_task = QuizTask()
+
+        self.quiz_task = QuizTask(self.db_manager, parent=self)
         self.task_area.addWidget(self.quiz_task)
-        self.debugging_task = DebuggingTask()
+
+        self.debugging_task = DebuggingTask(self.db_manager, parent=self)
         self.task_area.addWidget(self.debugging_task)
 
         # Initially show the empty widget
@@ -154,12 +155,33 @@ class UserWindow(FramelessWindow):
         central_widget.setLayout(main_v_layout)
         self.setCentralWidget(central_widget)
 
-        if self.is_admin:
-            self.switch_to_admin_button.show()
-
         self.center_window()
         self.show_speech_bubble()
         self.setFontSize(10)
+
+    def update_lessons_list(self):
+        self.lessons_list_widget.clear()
+        tasks = self.db_manager.get_tasks()
+        completed_tasks = self.db_manager.get_completed_tasks(self.user_id)
+
+        for task in tasks:
+            item = QListWidgetItem(task['title'])
+            item.setData(Qt.UserRole, task['id'])
+
+            if task['id'] in completed_tasks:
+                item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
+                item.setForeground(QColor('gray'))
+                icon = QIcon('resources/images/check_icon.png')
+                item.setIcon(icon)
+
+            self.lessons_list_widget.addItem(item)
+
+        self.task_area.setCurrentWidget(self.empty_widget)
+
+        if self.is_admin:
+            self.switch_to_admin_button.show()
+        else:
+            self.switch_to_admin_button.hide()
 
     def switch_to_admin_view(self):
         self.hide()
@@ -188,19 +210,19 @@ class UserWindow(FramelessWindow):
             task_type = task_data['type']
             if task_type == 'code':
                 self.task_area.setCurrentWidget(self.code_runner)
-                self.code_runner.load_task(task_data)
+                self.code_runner.load_task(task_data, self.user_id)
             elif task_type == 'drag_and_drop':
                 self.task_area.setCurrentWidget(self.drag_and_drop_task)
-                self.drag_and_drop_task.load_task(task_data)
+                self.drag_and_drop_task.load_task(task_data, self.user_id)
             elif task_type == 'matching':
                 self.task_area.setCurrentWidget(self.matching_task)
-                self.matching_task.load_task(task_data)
+                self.matching_task.load_task(task_data, self.user_id)
             elif task_type == 'quiz':
                 self.task_area.setCurrentWidget(self.quiz_task)
-                self.quiz_task.load_task(task_data)
+                self.quiz_task.load_task(task_data, self.user_id)
             elif task_type == 'debugging':
                 self.task_area.setCurrentWidget(self.debugging_task)
-                self.debugging_task.load_task(task_data)
+                self.debugging_task.load_task(task_data, self.user_id)
             else:
                 self.task_area.setCurrentWidget(self.empty_widget)
         else:

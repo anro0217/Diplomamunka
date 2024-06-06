@@ -12,11 +12,11 @@ from resources.widgets.myPasswordField import PasswordLineEdit
 class LoginWindow(FramelessPage):
     def __init__(self):
         super().__init__()
-        self.user_window = UserWindow(self)
-        self.admin_window = AdminWindow(self)
-        self.registration_window = RegistrationWindow(self)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
+        self.user_window = None
+        self.admin_window = None
+        self.registration_window = RegistrationWindow(self)
         self.setWindowModality(Qt.ApplicationModal)
         self.show()
         self.initUI()
@@ -95,6 +95,8 @@ class LoginWindow(FramelessPage):
                 username = f.read().strip()
                 if username and '\u200B' in username:
                     username = username.replace('\u200B', '')
+                    user_id = self.db_manager.get_user_id_by_username_or_email(username)
+                    self.create_windows(user_id, username == 'admin')
                     if username == 'admin':
                         self.admin_window.set_user_label(username)
                         self.admin_window.show()
@@ -138,12 +140,16 @@ class LoginWindow(FramelessPage):
             self.message_label.show()
 
     def open_user_window(self, username_or_email):
+        user_id = self.db_manager.get_user_id_by_username_or_email(username_or_email)
+        self.create_windows(user_id, False)
         self.user_window.set_user_label(username_or_email)
         self.user_window.show()
 
     def login_as_admin(self, username_or_email, password):
         if password == "admin_password":
-            self.open_admin_window(username_or_email)
+            self.create_windows(None, True)
+            self.admin_window.set_user_label(username_or_email)
+            self.admin_window.show()
             self.message_label.hide()
             self.hide()
         else:
@@ -152,8 +158,20 @@ class LoginWindow(FramelessPage):
             self.message_label.show()
 
     def open_admin_window(self, username_or_email):
+        self.admin_window = AdminWindow(self, self.user_window)
+        self.user_window = UserWindow(self, is_admin=True, admin_window=self.admin_window)
         self.admin_window.set_user_label(username_or_email)
         self.admin_window.show()
+
+    def create_windows(self, user_id, is_admin):
+        if self.admin_window is None:
+            self.admin_window = AdminWindow(self, None)
+        if self.user_window is None:
+            self.user_window = UserWindow(self, user_id, is_admin, self.admin_window)
+        self.admin_window.user_window = self.user_window
+        self.user_window.admin_window = self.admin_window
+        self.user_window.is_admin = is_admin
+        self.user_window.user_id = user_id
 
     def setFontSize(self, size):
         font = self.font()

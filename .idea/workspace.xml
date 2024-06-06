@@ -4,37 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Advanced login, registration and basic mainPage added">
-      <change afterPath="$PROJECT_DIR$/resources/images/help_icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/task_types/matchingTask.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/widgets/editTextAdvanced.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/widgets/speechBubble.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tempAdmin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tempUser.py" afterDir="false" />
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Added task types and advanced admin page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO" beforeDir="false" afterPath="$PROJECT_DIR$/TODO" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tananyag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/adminPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adminPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/loginPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/loginPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/registrationPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/settingsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/settingsPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/codeEditor.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/databaseViewer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/globalSignals.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/utils/globalSignals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/images/menu_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/menu_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/loginUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/utils/loginUtils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/myPasswordField.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/myPasswordField.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/mySlider.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/mySlider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/mySwitch.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/mySwitch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/codingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/matchingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/matchingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/quizTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -224,7 +205,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709675875099</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added task types and advanced admin page">
+      <option name="closed" value="true" />
+      <created>1717435855692</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717435855692</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -256,6 +245,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic login and settings page" />
     <MESSAGE value="Advanced login, registration and basic mainPage added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Advanced login, registration and basic mainPage added" />
+    <MESSAGE value="Added task types and advanced admin page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added task types and advanced admin page" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

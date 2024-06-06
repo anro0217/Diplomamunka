@@ -6,6 +6,8 @@ from resources.utils import loginUtils
 class DatabaseManager:
     def __init__(self, db_file):
         self.db_file = db_file
+        self.conn = sqlite3.connect(db_file)
+        self.cursor = self.conn.cursor()
         self.init_db()
 
     def init_db(self):
@@ -40,14 +42,16 @@ class DatabaseManager:
         # Kapcsolótábla létrehozása a felhasználók és feladatok között
         c.execute('''
             CREATE TABLE IF NOT EXISTS user_tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 task_id INTEGER NOT NULL,
                 status INTEGER NOT NULL DEFAULT 0,
                 FOREIGN KEY(user_id) REFERENCES users(id),
                 FOREIGN KEY(task_id) REFERENCES tasks(id),
-                PRIMARY KEY(user_id, task_id)
+                UNIQUE(user_id, task_id)
             )
         ''')
+        # c.execute('''DROP TABLE user_tasks''')
         conn.commit()
         conn.close()
 
@@ -89,15 +93,15 @@ class DatabaseManager:
     def validate_login(self, username_or_email, password):
         conn = sqlite3.connect(self.db_file)
         c = conn.cursor()
-        if loginUtils.get_username_field_type(username_or_email) == "email":  # Email cím esetén
-            c.execute("SELECT password FROM users WHERE email = ?", (username_or_email,))
-        else:  # Felhasználónév esetén
-            c.execute("SELECT password FROM users WHERE username = ?", (username_or_email,))
-        stored_password = c.fetchone()
+        if loginUtils.get_username_field_type(username_or_email) == "email":
+            c.execute("SELECT id, password FROM users WHERE email = ?", (username_or_email,))
+        else:
+            c.execute("SELECT id, password FROM users WHERE username = ?", (username_or_email,))
+        user = c.fetchone()
         conn.close()
-        if stored_password and loginUtils.check_password(stored_password[0], password):
-            return True
-        return False
+        if user and loginUtils.check_password(user[1], password):
+            return user[0]
+        return None
 
     def get_table_names(self):
         conn = sqlite3.connect(self.db_file)
@@ -125,14 +129,23 @@ class DatabaseManager:
         try:
             conn = sqlite3.connect(self.db_file)
             c = conn.cursor()
+
+            # Legkisebb szabad ID keresése
             c.execute('''
-                INSERT INTO tasks (title, description, type, code_template, code_result, drag_drop_items, 
+                SELECT COALESCE(MIN(t1.id + 1), 1) 
+                FROM tasks t1 
+                LEFT JOIN tasks t2 ON t1.id + 1 = t2.id 
+                WHERE t2.id IS NULL
+            ''')
+            next_id = c.fetchone()[0]
+
+            # Feladat hozzáadása a következő szabad ID-val
+            c.execute('''
+                INSERT INTO tasks (id, title, description, type, code_template, code_result, drag_drop_items, 
                 matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''',
-                      (title, description, task_type, code_template, code_result, drag_drop_items, matching_pairs,
-                       quiz_question,
-                       quiz_options, quiz_answer, debugging_code, correct_code))
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (next_id, title, description, task_type, code_template, code_result, drag_drop_items, matching_pairs,
+                  quiz_question, quiz_options, quiz_answer, debugging_code, correct_code))
             conn.commit()
         except sqlite3.Error as e:
             print("Database error:", e)
@@ -195,11 +208,24 @@ class DatabaseManager:
         try:
             conn = sqlite3.connect(self.db_file)
             c = conn.cursor()
+
+            # Kapcsolódó rekordok törlése a user_tasks táblából
+            if table_name == "tasks":
+                c.execute("DELETE FROM user_tasks WHERE task_id = ?", (record_id,))
+            elif table_name == "users":
+                c.execute("DELETE FROM user_tasks WHERE user_id = ?", (record_id,))
+
             query = f"DELETE FROM {table_name} WHERE id = ?"
             c.execute(query, (record_id,))
             conn.commit()
+
             if table_name == "tasks":
-                self.regenerate_ids()  # Újragenerálja az ID-kat a törlés után
+                self.reindex_tasks()
+            elif table_name == "users":
+                self.reindex_users()
+            elif table_name == "user_tasks":
+                self.reindex_user_tasks()
+
         except sqlite3.Error as e:
             print(f"Database error: {e}")
             return False
@@ -207,3 +233,139 @@ class DatabaseManager:
             conn.close()
         return True
 
+    def reindex_tasks(self):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        # Létrehozunk egy ideiglenes táblát az újraindexeléshez
+        c.execute('''
+            CREATE TEMPORARY TABLE tasks_temp AS 
+            SELECT rowid AS old_id, * FROM tasks ORDER BY id ASC
+        ''')
+
+        # Töröljük az eredeti feladatokat
+        c.execute('DELETE FROM tasks')
+        c.execute('DELETE FROM sqlite_sequence WHERE name="tasks"')
+
+        # Beszúrjuk az újraindexelt feladatokat
+        c.execute('''
+            INSERT INTO tasks (title, description, type, code_template, code_result, drag_drop_items, 
+                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
+            SELECT title, description, type, code_template, code_result, drag_drop_items, 
+                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+            FROM tasks_temp
+        ''')
+
+        # Frissítjük a user_tasks táblát
+        c.execute('''
+            UPDATE user_tasks 
+            SET task_id = (
+                SELECT tasks.id 
+                FROM tasks 
+                JOIN tasks_temp ON tasks_temp.old_id = user_tasks.task_id
+                WHERE tasks_temp.old_id = user_tasks.task_id
+            )
+            WHERE EXISTS (SELECT 1 FROM tasks_temp WHERE tasks_temp.old_id = user_tasks.task_id)
+        ''')
+
+        # Töröljük az ideiglenes táblát
+        c.execute('DROP TABLE tasks_temp')
+        conn.commit()
+        conn.close()
+
+    def reindex_users(self):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        # Létrehozunk egy ideiglenes táblát az újraindexeléshez
+        c.execute('''
+            CREATE TEMPORARY TABLE users_temp AS 
+            SELECT rowid AS old_id, * FROM users ORDER BY id ASC
+        ''')
+
+        # Töröljük az eredeti felhasználókat
+        c.execute('DELETE FROM users')
+        c.execute('DELETE FROM sqlite_sequence WHERE name="users"')
+
+        # Beszúrjuk az újraindexelt felhasználókat
+        c.execute('''
+            INSERT INTO users (username, email, password)
+            SELECT username, email, password
+            FROM users_temp
+        ''')
+
+        # Frissítjük a user_tasks táblát
+        c.execute('''
+            UPDATE user_tasks 
+            SET user_id = (
+                SELECT users.id 
+                FROM users 
+                JOIN users_temp ON users_temp.old_id = user_tasks.user_id
+                WHERE users_temp.old_id = user_tasks.user_id
+            )
+            WHERE EXISTS (SELECT 1 FROM users_temp WHERE users_temp.old_id = user_tasks.user_id)
+        ''')
+
+        # Töröljük az ideiglenes táblát
+        c.execute('DROP TABLE users_temp')
+        conn.commit()
+        conn.close()
+
+    def reindex_user_tasks(self):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        # Létrehozunk egy ideiglenes táblát az újraindexeléshez
+        c.execute('''
+            CREATE TEMPORARY TABLE user_tasks_temp AS 
+            SELECT rowid AS old_id, * FROM user_tasks ORDER BY id ASC
+        ''')
+
+        # Töröljük az eredeti user_tasks rekordokat
+        c.execute('DELETE FROM user_tasks')
+        c.execute('DELETE FROM sqlite_sequence WHERE name="user_tasks"')
+
+        # Beszúrjuk az újraindexelt user_tasks rekordokat
+        c.execute('''
+            INSERT INTO user_tasks (user_id, task_id, status)
+            SELECT user_id, task_id, status
+            FROM user_tasks_temp
+        ''')
+
+        # Töröljük az ideiglenes táblát
+        c.execute('DROP TABLE user_tasks_temp')
+        conn.commit()
+        conn.close()
+
+    def mark_task_as_completed(self, user_id, task_id):
+        try:
+            conn = sqlite3.connect(self.db_file)
+            c = conn.cursor()
+            c.execute('''
+                INSERT OR REPLACE INTO user_tasks (user_id, task_id, status)
+                VALUES (?, ?, 1)
+            ''', (user_id, task_id))
+            conn.commit()
+        except sqlite3.Error as e:
+            print("Database error:", e)
+            return False
+        finally:
+            conn.close()
+        return True
+
+    def get_completed_tasks(self, user_id):
+        query = 'SELECT task_id FROM user_tasks WHERE user_id = ? AND status = 1'
+        self.cursor.execute(query, (user_id,))
+        rows = self.cursor.fetchall()
+        return [row[0] for row in rows]
+
+    def get_user_id_by_username_or_email(self, username_or_email):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+        if loginUtils.get_username_field_type(username_or_email) == "email":
+            c.execute("SELECT id FROM users WHERE email = ?", (username_or_email,))
+        else:
+            c.execute("SELECT id FROM users WHERE username = ?", (username_or_email,))
+        user_id = c.fetchone()
+        conn.close()
+        return user_id[0] if user_id else None
