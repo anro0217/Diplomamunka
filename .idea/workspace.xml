@@ -4,22 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Basic login and settings page">
-      <change afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/reg_template.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Now it remembers to the solved tasks by an user">
+      <change afterPath="$PROJECT_DIR$/resources/task_types/materialPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/task_types/statisticsPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/task_types/welcomePage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/day_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/day_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/night_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/night_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/settings_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/settings_dark_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/adminPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adminPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/loginPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/loginPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/globalSignals.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/globalSignals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/mySlider.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mySlider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/mySwitch.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mySwitch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources/style.qss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/registrationPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/settingsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/settingsPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/images/menu_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/menu_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/images/robot.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/robot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/codingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/matchingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/matchingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/quizTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/widgets/myPasswordField.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/myPasswordField.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/widgets/speechBubble.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/speechBubble.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +44,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/gui/loginPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gui/mainPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gui/registrationPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/gui/settingsPage.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/main.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -52,26 +67,34 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.adminPage.executor": "Run",
+    "Python.asd.executor": "Run",
     "Python.database.executor": "Run",
     "Python.loginPage.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.mainPage.executor": "Run",
     "Python.reg_template.executor": "Run",
     "Python.registrationPage.executor": "Run",
+    "Python.test.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/HP/Desktop/Diplomamunka",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\images" />
+      <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\utils" />
+      <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\widgets" />
+      <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\task_types" />
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources" />
-      <recent name="C:\Users\HP\Desktop\Diplomamunka" />
-      <recent name="C:\Users\HP\Desktop\Diplomamunka\gui" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Diplomamunka" />
       <option name="ENV_FILES" value="" />
@@ -94,6 +117,56 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Diplomamunka" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="userPage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Diplomamunka" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\HP\Desktop\Diplomamunka\gui\userPage.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.userPage" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -119,7 +192,47 @@
       <option name="project" value="LOCAL" />
       <updated>1708970362103</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Advanced login, registration and basic mainPage added">
+      <option name="closed" value="true" />
+      <created>1709335750998</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1709335750998</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Advanced login, registration and basic mainPage added">
+      <option name="closed" value="true" />
+      <created>1709335763229</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1709335763229</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Advanced login, registration and basic mainPage added">
+      <option name="closed" value="true" />
+      <created>1709675875099</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1709675875099</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added task types and advanced admin page">
+      <option name="closed" value="true" />
+      <created>1717435855692</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717435855692</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Now it remembers to the solved tasks by an user">
+      <option name="closed" value="true" />
+      <created>1717703738858</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717703738858</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -150,6 +263,20 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic login and settings page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic login and settings page" />
+    <MESSAGE value="Advanced login, registration and basic mainPage added" />
+    <MESSAGE value="Added task types and advanced admin page" />
+    <MESSAGE value="Now it remembers to the solved tasks by an user" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now it remembers to the solved tasks by an user" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -1,0 +1,50 @@
+Tényleges TODO:
+-kb 40 feladattal feltölteni az adatbázist
+-a végére kiértékelni a felhasználó teljesítményét
+-tananyag oldalakat megvalósítani, valamint üdvözlő oldal
+
+-sötét téma és betűméret állítása, settingsben fullscreen lehetőség (talán)
+-code runner osztály implementálása: kód ellenőrzés assetekkel, output ellenőrzése (bonyolult, kevés kell belőle)
+-felh. váltáskor törölni a cím és robot mezőket
+-Név + ikon
+
+
+
+
+ellenőrzéshez: Felh. által nem ismert értékekkel teszteljük és meghatározott függv. nevet kell használnia
+
+új regisztráció esetén az is jelenjen meg az adatbázis nézetben
+
+ellenőrző osztály létrehozása, ami feladat id alapján leellenőrzi az összes feladattípus helyességét
+
+FELADATTÍPUS ÖTLETEK:
+Interaktív kvízek: Tervezz egy kvíz elrendezést, ahol a felhasználók tesztelhetik a Pythonnal kapcsolatos megértésüket.
+A kvízek tartalmazhatnak többszörös választási kérdéseket, igaz/hamis állításokat és kitöltendő üres helyeket.
+Azonnali visszajelzést nyújthatsz minden kérdés után, részletes magyarázatokkal, amelyek megerősítik a tanulást.
+
+Húzás és ejtéses kódblokkok: Készíts egy olyan tevékenységet, ahol a tanulók a kódblokkokat a helyes sorrendbe
+rendezhetik húzás és ejtéssel. Ez segíthet a kezdőknek megérteni a Python kód áramlását és az alapszintaxist anélkül,
+hogy gépelési hibákat kellene aggódniuk.
+
+Kód nyomon követési gyakorlatok: Valósíts meg egy felületet, ahol a felhasználók nyomon követhetik egy egyszerű Python
+program végrehajtását. Megjósolhatják a kimenetet vagy a változók állapotát a kód különböző pontjain. Ez ösztönözheti
+a program áramlásának és logikájának mélyebb megértését.
+
+Animáció-alapú tanulás: Integrálj animációkat a Python kód mögötti működés vizualizálásához, különösen a ciklusok,
+feltételes utasítások és függvényhívások magyarázatához. Ez különösen hasznos lehet a vizuális tanulók számára.
+
+Projekt-alapú tanulás: Kínálj egy projektteret, ahol a felhasználók alkalmazhatják a tanultakat kisebb projektek
+vagy scriptek építéséhez. Biztosíthatsz egy sor vezetett feladatot, amelyek lépésről lépésre egy teljes programot
+hoznak létre, ezáltal erősítve az alkalmazott tanulást.
+
+Kortárselemzés: Ösztönözd a tanulókat, hogy írjanak kis kódrészleteket, és küldjék be azokat kortárselemzésre.
+Létrehozhatsz egy rendszert, ahol a felhasználók megoszthatják kódjaikat másokkal, visszajelzést kaphatnak, és
+tanulhatnak egymás megközelítéseiből.
+
+Kód hibakeresési kihívások: Kínálj a felhasználóknak hibás kódrészleteket, és hívd fel őket, hogy azonosítsák és
+javítsák ki a hibákat. Ez segíthet a tanulóknak fejleszteni a hibakeresési készségeiket és megérteni a Python
+programozásban gyakori buktatókat.
+
+
+
+(magyar) könyvek és oldalak megjelölése a szakdolgozatban (https://scholar.google.com/)

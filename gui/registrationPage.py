@@ -1,20 +1,19 @@
-import sqlite3
-
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QVBoxLayout, QLineEdit, QPushButton, QLabel, QFrame
 from PyQt5.QtCore import Qt
-from basePage import FramelessWindow
-from resources.globalSignals import globalSignals
+from basePage import FramelessPage
+from resources.utils import loginUtils
+from resources.utils.globalSignals import globalSignals
+from resources.widgets.myPasswordField import PasswordLineEdit
 
 
-class RegistrationWindow(FramelessWindow):
-    def __init__(self, login_window=None):
+class RegistrationWindow(FramelessPage):
+    def __init__(self, login_window):
         super().__init__()
         self.login_window = login_window
-        globalSignals.fontSizeChanged.connect(self.setFontSize)
-        globalSignals.themeChanged.connect(self.setTheme)
         self.initUI()
         self.setFontSize(10)
+        globalSignals.fontSizeChanged.connect(self.setFontSize)
+        globalSignals.themeChanged.connect(self.setTheme)
 
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -22,56 +21,109 @@ class RegistrationWindow(FramelessWindow):
         # Felhasználónév mező
         self.username_field = QLineEdit()
         self.username_field.setPlaceholderText("Username")
+        self.username_field.setFixedSize(500, 45)
         self.layout.addWidget(self.username_field)
 
         # E-mail mező
         self.email_field = QLineEdit()
         self.email_field.setPlaceholderText("Email")
+        self.email_field.setFixedSize(500, 45)
         self.layout.addWidget(self.email_field)
 
         # Jelszó létrehozási mező
-        self.password_field = QLineEdit()
+        self.password_field = PasswordLineEdit()
         self.password_field.setPlaceholderText("Create password")
         self.password_field.setEchoMode(QLineEdit.Password)
+        self.password_field.setFixedSize(500, 45)
         self.layout.addWidget(self.password_field)
 
         # Jelszó megerősítési mező
-        self.confirm_password_field = QLineEdit()
+        self.confirm_password_field = PasswordLineEdit()
         self.confirm_password_field.setPlaceholderText("Confirm password")
         self.confirm_password_field.setEchoMode(QLineEdit.Password)
+        self.confirm_password_field.setFixedSize(500, 45)
+        self.confirm_password_field.returnPressed.connect(self.register)
         self.layout.addWidget(self.confirm_password_field)
 
         # Regisztrációs gomb
         self.register_button = QPushButton('Sign up')
-        self.register_button.setStyleSheet('font-size: 16px;')
+        self.register_button.setFixedSize(500, 55)
         self.register_button.clicked.connect(self.register)
         self.layout.addWidget(self.register_button)
+        self.layout.addSpacing(30)
 
         # Már van fiók? Bejelentkezés link
         self.login_label = QLabel('Already have an account? <a href="signup">Login</a>', self)
         self.login_label.setAlignment(Qt.AlignCenter)
-        self.login_label.setStyleSheet('margin-top: 10px;')
         self.login_label.linkActivated.connect(self.open_login)
         self.layout.addWidget(self.login_label)
+        self.layout.addSpacing(30)
 
-        # Divider vonal
-        self.divider = QFrame()
-        self.divider.setFrameShape(QFrame.HLine)
-        self.divider.setFrameShadow(QFrame.Sunken)
-        self.layout.addWidget(self.divider)
+        # Üzenet címke
+        self.message_label = QLabel(self)
+        self.message_label.setStyleSheet("color: red;")
+        self.message_label.setAlignment(Qt.AlignCenter)
+        self.message_label.setFixedSize(500, 40)
+        self.message_label.hide()
+        self.layout.addWidget(self.message_label)
+
+        self.layout.setSpacing(10)
+        self.layout.addStretch()
 
         self.setLayout(self.layout)
         self.center_window()
 
     def open_login(self):
+        if self.settings_window.isVisible():
+            self.settings_window.hide()
         self.hide()
         self.login_window.show()
 
-    def setTheme(self, darkModeEnabled):
-        if darkModeEnabled:
-            self.setStyleSheet("background-color: #333333; color: #ffffff;")
+    def register(self):
+        username = self.username_field.text()
+        email = self.email_field.text()
+        password = self.password_field.text()
+        confirm_password = self.confirm_password_field.text()
+
+        if not loginUtils.is_valid_email(email):
+            self.message_label.setText("Invalid email address!")
+            self.message_label.show()
+            return
+
+        if not loginUtils.is_strong_password(password):
+            self.message_label.setText("Too weak password!")
+            self.message_label.show()
+            return
+
+        if password != confirm_password:
+            self.message_label.setText("Password missmatch!")
+            self.message_label.show()
+            return
+
+        if self.db_manager.user_exists(username, email):
+            self.message_label.setText("Username or email address is already used!")
+            self.message_label.show()
+            return
+
+        hashed_password = loginUtils.hash_password(password)
+
+        if self.db_manager.add_user(username, email, hashed_password):
+            self.username_field.setText('')
+            self.email_field.setText('')
+            self.password_field.setText('')
+            self.confirm_password_field.setText('')
+            self.message_label.hide()
+            self.close()
+            self.login_window.username_field.setText('')
+            self.login_window.username_field.setFocus()
+            self.login_window.setWindowModality(Qt.ApplicationModal)
+            self.login_window.show()
+            self.login_window.message_label.setStyleSheet("color: green;")
+            self.login_window.message_label.setText("Registration successful!")
+            self.login_window.message_label.show()
         else:
-            self.setStyleSheet("background-color: #ffffff; color: #000000;")
+            self.message_label.setText("An error occurred during registration.\nPlease try again!")
+            self.message_label.show()
 
     def setFontSize(self, size):
         font = self.font()
@@ -81,46 +133,5 @@ class RegistrationWindow(FramelessWindow):
         self.password_field.setFont(font)
         self.confirm_password_field.setFont(font)
         self.register_button.setFont(font)
-
-    def register_field_test(self):
-        username = self.username_field.text()
-        email = self.email_field.text()
-        password = self.password_field.text()
-        confirm_password = self.confirm_password_field.text()
-        print(username + email + password + confirm_password)
-    def register(self):
-        username = self.username_field.text()
-        email = self.email_field.text()
-        password = self.password_field.text()
-        confirm_password = self.confirm_password_field.text()
-
-        if password != confirm_password:
-            print("A megadott jelszavak eltérnek!")
-            return
-
-        # Adatbázis kapcsolat létrehozása
-        conn = sqlite3.connect('database/application.db')
-        c = conn.cursor()
-
-        try:
-            # Felhasználónév és email ellenőrzése
-            c.execute("SELECT * FROM users WHERE username = ? OR email = ?", (username, email))
-            if c.fetchone():
-                print("A felhasználónév vagy az email már foglalt!")
-                conn.close()
-                return
-
-        except sqlite3.Error as e:
-            print("Adatbázis hiba:", e)
-            print("Hiba típusa:", type(e))
-
-        # Új felhasználó hozzáadása az adatbázishoz
-        try:
-            c.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (username, email, password))
-            conn.commit()
-            print("A regisztráció sikeres!")
-        except sqlite3.Error as e:
-            print("Adatbázis hiba:", e)
-        finally:
-            conn.close()
-
+        self.message_label.setFont(font)
+        self.login_label.setFont(font)
