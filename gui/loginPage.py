@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QApplication
+from PyQt5.QtWidgets import QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QApplication, \
+    QSpacerItem, QSizePolicy, QWidget
 from basePage import FramelessPage
 from gui.adminPage import AdminWindow
 from gui.registrationPage import RegistrationWindow
@@ -7,20 +8,21 @@ from gui.userPage import UserWindow
 from resources.utils import loginUtils
 from resources.utils.globalSignals import globalSignals
 from resources.widgets.myPasswordField import PasswordLineEdit
+from resources.widgets.mySlider import ClickableSlider
 
 
 class LoginWindow(FramelessPage):
     def __init__(self):
         super().__init__()
-        globalSignals.fontSizeChanged.connect(self.setFontSize)
-        globalSignals.themeChanged.connect(self.setTheme)
         self.user_window = None
         self.admin_window = None
         self.registration_window = RegistrationWindow(self)
         self.setWindowModality(Qt.ApplicationModal)
         self.show()
         self.initUI()
-        self.setFontSize(20)
+        self.setFontSize(10)
+        globalSignals.fontSizeChanged.connect(self.setFontSize)
+        globalSignals.themeChanged.connect(self.setTheme)
         self.check_auto_login()
 
     def initUI(self):
@@ -38,7 +40,6 @@ class LoginWindow(FramelessPage):
 
         self.checkBox = QCheckBox("Remember me", self)
         self.checkBox.setFocusPolicy(Qt.StrongFocus)
-        self.checkBox.setFixedSize(500, 30)
         self.checkBox.setStyleSheet("""
                     QCheckBox:focus {
                         border: none;
@@ -46,12 +47,11 @@ class LoginWindow(FramelessPage):
                     }""")
 
         self.loginButton = QPushButton("Login", self)
-        self.loginButton.setFixedSize(500, 50)
+        self.loginButton.setFixedSize(500, 55)
         self.loginButton.clicked.connect(self.which_user)
 
         self.register_label = QLabel("Don't have an account? <a href='Sign up'>Sign up</a>", self)
         self.register_label.setAlignment(Qt.AlignCenter)
-        self.register_label.setFixedSize(500, 20)
         self.register_label.linkActivated.connect(self.open_registration)
 
         self.message_label = QLabel(self)
@@ -63,28 +63,31 @@ class LoginWindow(FramelessPage):
         self.exitButton = QPushButton("Exit", self)
         self.exitButton.setFixedSize(150, 50)
         self.exitButton.clicked.connect(QApplication.instance().quit)
-
-        # Adding widgets to the layout in the desired order
+        # Adding widgets to the layout in the desired order with spacers
         self.layout.addWidget(self.username_field)
         self.layout.addWidget(self.password_field)
         self.layout.addWidget(self.checkBox)
+        self.layout.addSpacing(30)
         self.layout.addWidget(self.loginButton)
+        self.layout.addSpacing(30)
         self.layout.addWidget(self.register_label)
-        self.layout.addWidget(self.message_label)  # This is now below the register_label
-        self.layout.setSpacing(10)
-        self.layout.addStretch()  # This will push the exit button to the bottom
+        self.layout.addSpacing(30)
+        self.layout.addWidget(self.message_label)
+        self.layout.addStretch()
 
         # Bottom buttons layout
         button_layout = QHBoxLayout()
-        button_layout.addWidget(self.exitButton, alignment=Qt.AlignLeft)
-        button_layout.addStretch()
+        button_layout.addWidget(self.exitButton, alignment=Qt.AlignLeft | Qt.AlignBottom)
+        #button_layout.addStretch()
         self.layout.addLayout(button_layout)
 
         # Set tab order explicitly
         self.setTabOrder(self.username_field, self.password_field)
         self.setTabOrder(self.password_field, self.checkBox)
         self.setTabOrder(self.checkBox, self.loginButton)
-        self.setTabOrder(self.loginButton, self.exitButton)
+        self.setTabOrder(self.loginButton, self.register_label)
+        self.setTabOrder(self.register_label, self.message_label)
+        self.setTabOrder(self.message_label, self.exitButton)
 
         self.setLayout(self.layout)
         self.center_window()
@@ -108,6 +111,8 @@ class LoginWindow(FramelessPage):
             pass
 
     def open_registration(self):
+        if self.settings_window.isVisible():
+            self.settings_window.hide()
         self.message_label.hide()
         self.hide()
         self.registration_window.username_field.setText('')
@@ -143,6 +148,7 @@ class LoginWindow(FramelessPage):
         user_id = self.db_manager.get_user_id_by_username_or_email(username_or_email)
         self.create_windows(user_id, False)
         self.user_window.set_user_label(username_or_email)
+        self.settings_window.hide()
         self.user_window.show()
 
     def login_as_admin(self, username_or_email, password):
@@ -161,6 +167,7 @@ class LoginWindow(FramelessPage):
         self.admin_window = AdminWindow(self, self.user_window)
         self.user_window = UserWindow(self, is_admin=True, admin_window=self.admin_window)
         self.admin_window.set_user_label(username_or_email)
+        self.settings_window.hide()
         self.admin_window.show()
 
     def create_windows(self, user_id, is_admin):
@@ -180,3 +187,6 @@ class LoginWindow(FramelessPage):
         self.password_field.setFont(font)
         self.loginButton.setFont(font)
         self.exitButton.setFont(font)
+        self.message_label.setFont(font)
+        self.register_label.setFont(font)
+        self.checkBox.setFont(font)

@@ -6,6 +6,8 @@ from PyQt5.QtCore import QSize, Qt, QRect
 from PyQt5.QtGui import QIcon, QPainter, QTextFormat, QColor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, QPlainTextEdit, QMessageBox
 
+from resources.utils.globalSignals import globalSignals
+
 
 class LineNumberArea(QWidget):
     def __init__(self, editor):
@@ -23,13 +25,15 @@ class CodeEditor(QPlainTextEdit):
     def __init__(self):
         super().__init__()
         self.line_number_area = LineNumberArea(self)
+        self.is_dark_mode = False
 
         self.blockCountChanged.connect(self.update_line_number_area_width)
         self.updateRequest.connect(self.update_line_number_area)
-        self.cursorPositionChanged.connect(self.highlight_current_line)
+        self.cursorPositionChanged.connect(self.on_cursor_position_changed)
 
         self.update_line_number_area_width(0)
         self.highlight_current_line()
+        globalSignals.themeChanged.connect(self.on_theme_changed)
 
     def line_number_area_width(self):
         digits = 1
@@ -57,17 +61,30 @@ class CodeEditor(QPlainTextEdit):
         cr = self.contentsRect()
         self.line_number_area.setGeometry(QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height()))
 
-    def highlight_current_line(self):
+    def highlight_current_line(self, is_dark_mode=False):
         extra_selections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
-            line_color = QColor(Qt.yellow).lighter(160)
+            line_color = self.get_highlight_color(is_dark_mode)
             selection.format.setBackground(line_color)
             selection.format.setProperty(QTextFormat.FullWidthSelection, True)
             selection.cursor = self.textCursor()
             selection.cursor.clearSelection()
             extra_selections.append(selection)
         self.setExtraSelections(extra_selections)
+
+    def get_highlight_color(self, is_dark_mode=False):
+        if is_dark_mode:
+            return QColor(Qt.green).lighter(140)
+        else:
+            return QColor(Qt.yellow).lighter(160)
+
+    def on_cursor_position_changed(self):
+        self.highlight_current_line(self.is_dark_mode)
+
+    def on_theme_changed(self, is_dark_mode):
+        self.is_dark_mode = is_dark_mode
+        self.highlight_current_line(is_dark_mode)
 
     def line_number_area_paint_event(self, event):
         painter = QPainter(self.line_number_area)
@@ -203,7 +220,7 @@ class CodeRunner(QWidget):
             for i, test_case in enumerate(test_cases):
                 result = eval(test_case, user_namespace)
                 expected_result = eval(expected_outputs[i])
-                if result != expected_result:
+                if repr(result) != repr(expected_result):
                     return False, f"Test failed: {test_case} expected {expected_result}, but got {result}"
 
             # Teszteljük a print outputokat
@@ -231,8 +248,11 @@ class CodeRunner(QWidget):
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.mark_task_as_completed(self.user_id, self.task_data['id'])
                 self.parent_window.update_lessons_list()
+                self.parent_window.get_next_task(self.task_data['id'])
         else:
             QMessageBox.warning(self, "Incorrect", message)
+            if self.parent_window and not self.parent_window.is_admin:
+                self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
 
     def clear(self):
         self.code_editor.clear()

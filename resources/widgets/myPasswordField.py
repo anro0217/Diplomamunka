@@ -1,11 +1,17 @@
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QStyle
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize
+from resources.utils.globalSignals import globalSignals
 
 
 class PasswordLineEdit(QLineEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.is_dark_mode = False
+
+        # Csatlakozás a globális themeChanged jelzéshez
+        globalSignals.themeChanged.connect(self.updateTheme)
 
         # Az ikonok elérési útjainak beállítása
         self.show_icon_path = 'resources/images/to_hide.png'
@@ -27,8 +33,23 @@ class PasswordLineEdit(QLineEdit):
         self.toggle_password_button.pressed.connect(self.show_password)
         self.toggle_password_button.released.connect(self.hide_password)
 
-        # A gomb elhelyezése a beviteli mezőben
+        self.setIconPaths()
+
         self.setButtonPosition()
+
+    def updateTheme(self, is_dark_mode):
+        if self.is_dark_mode != is_dark_mode:
+            self.is_dark_mode = is_dark_mode
+            self.setIconPaths()
+
+    def setIconPaths(self):
+        if self.is_dark_mode:
+            self.show_icon_path = 'resources/images/to_hide_light.png'
+            self.hide_icon_path = 'resources/images/to_show_light.png'
+        else:
+            self.show_icon_path = 'resources/images/to_hide.png'
+            self.hide_icon_path = 'resources/images/to_show.png'
+        self.hide_password()
 
     def setButtonPosition(self):
         frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)

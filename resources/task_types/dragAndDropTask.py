@@ -17,7 +17,7 @@ class DragAndDropTask(QWidget):
         self.list_widget.setDragDropMode(QListWidget.InternalMove)
 
         self.check_button = QPushButton("Check Order", self)
-        self.check_button.setFixedSize(100, 30)
+        #self.check_button.setFixedSize(100, 30)
         self.check_button.clicked.connect(self.check_order)
         layout.addWidget(self.check_button)
 
@@ -44,5 +44,8 @@ class DragAndDropTask(QWidget):
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.mark_task_as_completed(self.user_id, self.task_data['id'])
                 self.parent_window.update_lessons_list()
+                self.parent_window.get_next_task(self.task_data['id'])
         else:
             QMessageBox.warning(self, "Incorrect", "Your solution is incorrect.")
+            if self.parent_window and not self.parent_window.is_admin:
+                self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])

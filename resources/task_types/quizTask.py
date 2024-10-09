@@ -47,8 +47,11 @@ class QuizTask(QWidget):
                 if self.parent_window and not self.parent_window.is_admin:
                     self.db_manager.mark_task_as_completed(self.user_id, self.task_data['id'])
                     self.parent_window.update_lessons_list()
+                    self.parent_window.get_next_task(self.task_data['id'])
             else:
                 QMessageBox.warning(self, "Incorrect", "Your answer is incorrect.")
+                if self.parent_window and not self.parent_window.is_admin:
+                    self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
         else:
             QMessageBox.warning(self, "No Selection", "Please select an option.")
 

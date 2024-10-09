@@ -1,6 +1,17 @@
-ellenőrzéshez: Felh. által nem ismert értékekkel teszteljük és meghatározott függv. nevet kell használnia
+Tényleges TODO:
+-kb 40 feladattal feltölteni az adatbázist
+-a végére kiértékelni a felhasználó teljesítményét
+-tananyag oldalakat megvalósítani, valamint üdvözlő oldal
 
-Név + ikon
+-sötét téma és betűméret állítása, settingsben fullscreen lehetőség (talán)
+-code runner osztály implementálása: kód ellenőrzés assetekkel, output ellenőrzése (bonyolult, kevés kell belőle)
+-felh. váltáskor törölni a cím és robot mezőket
+-Név + ikon
+
+
+
+
+ellenőrzéshez: Felh. által nem ismert értékekkel teszteljük és meghatározott függv. nevet kell használnia
 
 új regisztráció esetén az is jelenjen meg az adatbázis nézetben
 

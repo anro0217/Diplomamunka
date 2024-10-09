@@ -10,10 +10,10 @@ class RegistrationWindow(FramelessPage):
     def __init__(self, login_window):
         super().__init__()
         self.login_window = login_window
+        self.initUI()
+        self.setFontSize(10)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
         globalSignals.themeChanged.connect(self.setTheme)
-        self.initUI()
-        self.setFontSize(20)
 
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -47,16 +47,17 @@ class RegistrationWindow(FramelessPage):
 
         # Regisztrációs gomb
         self.register_button = QPushButton('Sign up')
-        self.register_button.setFixedSize(500, 50)
+        self.register_button.setFixedSize(500, 55)
         self.register_button.clicked.connect(self.register)
         self.layout.addWidget(self.register_button)
+        self.layout.addSpacing(30)
 
         # Már van fiók? Bejelentkezés link
         self.login_label = QLabel('Already have an account? <a href="signup">Login</a>', self)
         self.login_label.setAlignment(Qt.AlignCenter)
-        self.login_label.setFixedSize(500, 20)
         self.login_label.linkActivated.connect(self.open_login)
         self.layout.addWidget(self.login_label)
+        self.layout.addSpacing(30)
 
         # Üzenet címke
         self.message_label = QLabel(self)
@@ -66,12 +67,6 @@ class RegistrationWindow(FramelessPage):
         self.message_label.hide()
         self.layout.addWidget(self.message_label)
 
-        # Divider vonal
-        self.divider = QFrame()
-        self.divider.setFrameShape(QFrame.HLine)
-        self.divider.setFrameShadow(QFrame.Sunken)
-        self.layout.addWidget(self.divider)
-
         self.layout.setSpacing(10)
         self.layout.addStretch()
 
@@ -79,6 +74,8 @@ class RegistrationWindow(FramelessPage):
         self.center_window()
 
     def open_login(self):
+        if self.settings_window.isVisible():
+            self.settings_window.hide()
         self.hide()
         self.login_window.show()
 
@@ -136,3 +133,5 @@ class RegistrationWindow(FramelessPage):
         self.password_field.setFont(font)
         self.confirm_password_field.setFont(font)
         self.register_button.setFont(font)
+        self.message_label.setFont(font)
+        self.login_label.setFont(font)

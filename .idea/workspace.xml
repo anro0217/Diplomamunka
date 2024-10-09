@@ -4,19 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Added task types and advanced admin page">
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Now it remembers to the solved tasks by an user">
+      <change afterPath="$PROJECT_DIR$/resources/task_types/materialPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/task_types/statisticsPage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/task_types/welcomePage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO" beforeDir="false" afterPath="$PROJECT_DIR$/TODO" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/basePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/adminPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adminPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/loginPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/loginPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/registrationPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/registrationPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/settingsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/settingsPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/images/menu_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/menu_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/images/robot.png" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/robot.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/codingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/matchingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/matchingTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/quizTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/widgets/myPasswordField.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/myPasswordField.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/widgets/speechBubble.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/speechBubble.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717435855692</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Now it remembers to the solved tasks by an user">
+      <option name="closed" value="true" />
+      <created>1717703738858</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717703738858</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -246,7 +265,8 @@
     <MESSAGE value="Basic login and settings page" />
     <MESSAGE value="Advanced login, registration and basic mainPage added" />
     <MESSAGE value="Added task types and advanced admin page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added task types and advanced admin page" />
+    <MESSAGE value="Now it remembers to the solved tasks by an user" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now it remembers to the solved tasks by an user" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

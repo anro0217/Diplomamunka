@@ -13,6 +13,15 @@ class DatabaseManager:
     def init_db(self):
         conn = sqlite3.connect(self.db_file)
         c = conn.cursor()
+
+        # # Ellenőrizzük, hogy az oszlop már létezik-e
+        # c.execute('PRAGMA table_info(tasks)')
+        # columns = [row[1] for row in c.fetchall()]
+        #
+        # if 'material' not in columns:
+        #     # Ha az oszlop nem létezik, hozzáadjuk
+        #     c.execute('ALTER TABLE tasks ADD COLUMN material TEXT')
+
         c.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY,
@@ -36,7 +45,8 @@ class DatabaseManager:
                 quiz_options TEXT,
                 quiz_answer TEXT,
                 debugging_code TEXT,
-                correct_code TEXT
+                correct_code TEXT,
+                material TEXT
             )
         ''')
         # Kapcsolótábla létrehozása a felhasználók és feladatok között
@@ -46,12 +56,24 @@ class DatabaseManager:
                 user_id INTEGER NOT NULL,
                 task_id INTEGER NOT NULL,
                 status INTEGER NOT NULL DEFAULT 0,
+                failures INTEGER NOT NULL DEFAULT 0,
                 FOREIGN KEY(user_id) REFERENCES users(id),
                 FOREIGN KEY(task_id) REFERENCES tasks(id),
                 UNIQUE(user_id, task_id)
             )
         ''')
-        # c.execute('''DROP TABLE user_tasks''')
+
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS user_settings (
+                        id INTEGER PRIMARY KEY,
+                        user_id TEXT UNIQUE,
+                        theme TEXT,
+                        font_size INTEGER
+            )
+        ''')
+
+        #c.execute('''DROP TABLE user_tasks''')
+
         conn.commit()
         conn.close()
 
@@ -125,7 +147,7 @@ class DatabaseManager:
 
     def add_task(self, title, description, task_type, code_template=None, code_result=None, drag_drop_items=None,
                  matching_pairs=None, quiz_question=None, quiz_options=None, quiz_answer=None, debugging_code=None,
-                 correct_code=None):
+                 correct_code=None, material=None):
         try:
             conn = sqlite3.connect(self.db_file)
             c = conn.cursor()
@@ -142,10 +164,34 @@ class DatabaseManager:
             # Feladat hozzáadása a következő szabad ID-val
             c.execute('''
                 INSERT INTO tasks (id, title, description, type, code_template, code_result, drag_drop_items, 
-                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (next_id, title, description, task_type, code_template, code_result, drag_drop_items, matching_pairs,
-                  quiz_question, quiz_options, quiz_answer, debugging_code, correct_code))
+                  quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material))
+            conn.commit()
+        except sqlite3.Error as e:
+            print("Database error:", e)
+            return False
+        finally:
+            conn.close()
+        return True
+
+    def update_task(self, task_id, title, description, task_type, code_template=None, code_result=None,
+                    drag_drop_items=None, matching_pairs=None, quiz_question=None, quiz_options=None,
+                    quiz_answer=None, debugging_code=None, correct_code=None, material=None):
+        try:
+            conn = sqlite3.connect(self.db_file)
+            c = conn.cursor()
+
+            c.execute('''
+                UPDATE tasks
+                SET title = ?, description = ?, type = ?, code_template = ?, code_result = ?, 
+                    drag_drop_items = ?, matching_pairs = ?, quiz_question = ?, quiz_options = ?, 
+                    quiz_answer = ?, debugging_code = ?, correct_code = ?, material = ?
+                WHERE id = ?
+            ''', (title, description, task_type, code_template, code_result, drag_drop_items,
+                  matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material,
+                  task_id))
             conn.commit()
         except sqlite3.Error as e:
             print("Database error:", e)
@@ -160,7 +206,7 @@ class DatabaseManager:
         c = conn.cursor()
         c.execute('''
             SELECT title, description, type, code_template, code_result, drag_drop_items, matching_pairs, 
-            quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+            quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material
             FROM tasks WHERE title = ?
         ''', (title,))
         task = c.fetchone()
@@ -182,12 +228,24 @@ class DatabaseManager:
         c = conn.cursor()
         c.execute('''
             SELECT id, title, description, type, code_template, code_result, drag_drop_items, matching_pairs, 
-            quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+            quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material
             FROM tasks WHERE id = ?
         ''', (task_id,))
         task = c.fetchone()
         conn.close()
         return dict(task) if task else None
+
+    def get_task_by_title(self, title):
+        try:
+            conn = sqlite3.connect(self.db_file)
+            c = conn.cursor()
+            c.execute("SELECT * FROM tasks WHERE title = ?", (title,))
+            return c.fetchone()
+        except sqlite3.Error as e:
+            print("Database error:", e)
+            return None
+        finally:
+            conn.close()
 
     def regenerate_ids(self):
         conn = sqlite3.connect(self.db_file)
@@ -196,9 +254,9 @@ class DatabaseManager:
         c.execute('''DELETE FROM tasks''')
         c.execute('''UPDATE sqlite_sequence SET seq = 0 WHERE name = 'tasks' ''')
         c.execute('''INSERT INTO tasks (title, description, type, code_template, code_result, drag_drop_items, 
-                    matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
+                    matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material)
                     SELECT title, description, type, code_template, code_result, drag_drop_items, 
-                    matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+                    matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material
                     FROM temp_tasks''')
         c.execute('''DROP TABLE temp_tasks''')
         conn.commit()
@@ -250,9 +308,9 @@ class DatabaseManager:
         # Beszúrjuk az újraindexelt feladatokat
         c.execute('''
             INSERT INTO tasks (title, description, type, code_template, code_result, drag_drop_items, 
-                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code)
+                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material)
             SELECT title, description, type, code_template, code_result, drag_drop_items, 
-                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code
+                matching_pairs, quiz_question, quiz_options, quiz_answer, debugging_code, correct_code, material
             FROM tasks_temp
         ''')
 
@@ -341,10 +399,52 @@ class DatabaseManager:
         try:
             conn = sqlite3.connect(self.db_file)
             c = conn.cursor()
-            c.execute('''
-                INSERT OR REPLACE INTO user_tasks (user_id, task_id, status)
-                VALUES (?, ?, 1)
-            ''', (user_id, task_id))
+            existing_record = c.execute(
+                'SELECT failures FROM user_tasks WHERE user_id = ? AND task_id = ?',
+                (user_id, task_id)
+            ).fetchone()
+
+            if existing_record:
+                c.execute('''
+                    UPDATE user_tasks 
+                    SET status = 1 
+                    WHERE user_id = ? AND task_id = ?
+                ''', (user_id, task_id))
+            else:
+                c.execute('''
+                    INSERT INTO user_tasks (user_id, task_id, status, failures) 
+                    VALUES (?, ?, 1, 0)
+                ''', (user_id, task_id))
+
+            conn.commit()
+        except sqlite3.Error as e:
+            print("Database error:", e)
+            return False
+        finally:
+            conn.close()
+        return True
+
+    def increment_failure_count(self, user_id, task_id):
+        try:
+            conn = sqlite3.connect(self.db_file)
+            c = conn.cursor()
+            existing_record = c.execute(
+                'SELECT failures FROM user_tasks WHERE user_id = ? AND task_id = ?',
+                (user_id, task_id)
+            ).fetchone()
+
+            if existing_record:
+                c.execute('''
+                    UPDATE user_tasks 
+                    SET failures = failures + 1 
+                    WHERE user_id = ? AND task_id = ?
+                ''', (user_id, task_id))
+            else:
+                c.execute('''
+                    INSERT INTO user_tasks (user_id, task_id, status, failures) 
+                    VALUES (?, ?, 0, 1)
+                ''', (user_id, task_id))
+
             conn.commit()
         except sqlite3.Error as e:
             print("Database error:", e)
@@ -369,3 +469,70 @@ class DatabaseManager:
         user_id = c.fetchone()
         conn.close()
         return user_id[0] if user_id else None
+
+    def save_user_settings(self, user_id, theme=None, font_size=None):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        # Ellenőrizzük, hogy létezik-e a beállítás
+        c.execute("SELECT * FROM user_settings WHERE user_id=?", (user_id,))
+        result = c.fetchone()
+
+        if result:
+            # Frissítjük a meglévő beállításokat
+            if theme is not None and font_size is not None:
+                c.execute("UPDATE user_settings SET theme=?, font_size=? WHERE user_id=?", (theme, font_size, user_id))
+            elif theme is not None:
+                c.execute("UPDATE user_settings SET theme=? WHERE user_id=?", (theme, user_id))
+            elif font_size is not None:
+                c.execute("UPDATE user_settings SET font_size=? WHERE user_id=?", (font_size, user_id))
+        else:
+            # Új beállításokat adunk hozzá, ha egyik sem létezik
+            c.execute("INSERT INTO user_settings (user_id, theme, font_size) VALUES (?, ?, ?)",
+                      (user_id, theme if theme is not None else 'light', font_size if font_size is not None else 10))
+
+        conn.commit()
+        conn.close()
+
+    def load_user_settings(self, user_id):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        c.execute("SELECT theme, font_size FROM user_settings WHERE user_id=?", (user_id,))
+        result = c.fetchone()
+
+        conn.close()
+
+        if result:
+            return {
+                'theme': result[0],
+                'font_size': result[1]
+            }
+        else:
+            return None
+
+    def get_user_statistics(self, user_id):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        c.execute("SELECT task_id, status, failures FROM user_tasks WHERE user_id = ?",(user_id,))
+        results = c.fetchall()
+        conn.close()
+
+        # Összesített statisztikák kiszámítása
+        total_tasks = len(results)  # Az összes feladat
+        completed_tasks = sum(1 for task in results if task[1] == 1)  # Teljesített feladatok
+        total_failures = sum(task[2] for task in results)  # Összes hiba
+
+        # Teljesítési arány és pontosság kiszámítása
+        completion_rate = (completed_tasks / total_tasks * 100) if total_tasks > 0 else 0
+        accuracy = (completed_tasks / (
+                    completed_tasks + total_failures) * 100) if completed_tasks + total_failures > 0 else 0
+
+        return {
+            "total_tasks": total_tasks,
+            "completed_tasks": completed_tasks,
+            "total_failures": total_failures,
+            "completion_rate": completion_rate,
+            "accuracy": accuracy
+        }

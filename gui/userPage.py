@@ -1,30 +1,31 @@
 from PyQt5.QtCore import Qt, QSize, QPoint
 from PyQt5.QtGui import QPixmap, QIcon, QFont, QColor
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QMenu, QAction, QListWidget, \
-    QApplication, QStackedWidget, QMessageBox, QListWidgetItem
+    QApplication, QStackedWidget, QMessageBox, QListWidgetItem, QDialog
 from baseWindow import FramelessWindow
 from resources.task_types.codeDebuggingTask import DebuggingTask
 from resources.task_types.dragAndDropTask import DragAndDropTask
 from resources.task_types.matchingTask import MatchingTask
+from resources.task_types.materialPage import MaterialPage
 from resources.task_types.quizTask import QuizTask
+from resources.task_types.statisticsPage import StatisticsPage
+from resources.task_types.welcomePage import WelcomePage
 from resources.utils.globalSignals import globalSignals
 from resources.widgets.speechBubble import SpeechBubble
-from resources.task_types.codingTask import CodeRunner  # Import the TaskArea class
+from resources.task_types.codingTask import CodeRunner
 
 
 class UserWindow(FramelessWindow):
     def __init__(self, login_window, user_id=None, is_admin=False, admin_window=None):
         super().__init__(login_window)
-        globalSignals.fontSizeChanged.connect(self.setFontSize)
-        globalSignals.themeChanged.connect(self.setTheme)
         self.admin_window = admin_window
         self.is_admin = is_admin
         self.user_id = user_id
+        self.current_widget = None
         self.initUI()
-
-    def showEvent(self, event):
-        super().showEvent(event)
-        self.update_lessons_list()
+        globalSignals.fontSizeChanged.connect(self.setFontSize)
+        globalSignals.themeChanged.connect(self.setTheme)
+        self.load_user_settings()
 
     def initUI(self):
         # Lessons menu toggle button
@@ -34,11 +35,18 @@ class UserWindow(FramelessWindow):
         self.lessons_button.setIconSize(QSize(40, 40))
         self.lessons_button.clicked.connect(self.toggle_lessons_dropdown)
 
+        self.lessons_text = QLabel("Lessons")
+
         # Create a QListWidget for the lessons
         self.lessons_list_widget = QListWidget()
         self.lessons_list_widget.setMaximumWidth(200)
         self.lessons_list_widget.setVisible(False)
         self.lessons_list_widget.itemClicked.connect(self.on_lesson_clicked)
+
+        self.statistics_button = QPushButton("Check statistics", self)
+        self.statistics_button.setMaximumWidth(200)
+        self.statistics_button.setVisible(False)
+        self.statistics_button.clicked.connect(self.on_statistics_clicked)
 
         # Lesson title
         self.lesson_title = QLabel("")
@@ -47,35 +55,6 @@ class UserWindow(FramelessWindow):
         self.user_label = QLabel("")
         self.user_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.user_label.setDisabled(False)
-
-        # User menu/profile button
-        self.user_menu_button = QPushButton()
-        self.profile_icon = QIcon('resources/images/blank_profile.png')
-        self.user_menu_button.setIcon(self.profile_icon)
-        self.user_menu_button.setIconSize(QSize(40, 40))
-        self.user_menu_button.setFlat(True)
-        self.user_menu_button.setFixedSize(40, 40)
-        self.user_menu_button.setStyleSheet(
-            "QPushButton {"
-            "border: none;"
-            "border-radius: 20px;"
-            "}"
-            "QPushButton:pressed {"
-            "border: 1px solid #8f8f91;"
-            "}"
-        )
-
-        # Create user menu
-        self.user_menu = QMenu()
-        self.user_menu_button.setMenu(self.user_menu)
-        self.profile_action = QAction("Profile", self)
-        self.settings_action = QAction("Settings", self)
-        self.sign_out_action = QAction("Sign Out", self)
-        self.sign_out_action.triggered.connect(self.sign_out)
-        self.exit_action = QAction("Exit", self)
-        self.exit_action.triggered.connect(QApplication.instance().quit)
-
-        self.user_menu.addActions([self.settings_action, self.sign_out_action, self.profile_action, self.exit_action])
 
         # Create speech bubble for task description
         self.speech_bubble = SpeechBubble()
@@ -86,9 +65,12 @@ class UserWindow(FramelessWindow):
         self.robot_label.setFixedSize(215, 350)
         self.robot_label.mousePressEvent = self.toggle_speech_bubble
 
+        self.check_icon = QIcon('resources/images/check_icon.png')
+
         # Layout for the top row (lessons button, lesson title, user label, user menu button)
         user_layout = QHBoxLayout()
         user_layout.addWidget(self.lessons_button)
+        user_layout.addWidget(self.lessons_text)
         user_layout.addWidget(self.lesson_title, 1)
         user_layout.addWidget(self.user_label)
         user_layout.addWidget(self.user_menu_button)
@@ -97,6 +79,7 @@ class UserWindow(FramelessWindow):
         lessons_layout = QVBoxLayout()
         lessons_layout.addWidget(self.robot_label, 0, Qt.AlignBottom)
         lessons_layout.addWidget(self.lessons_list_widget)
+        lessons_layout.addWidget(self.statistics_button)
 
         # Create the top thin layout with a color
         top_layout_widget = QWidget()
@@ -110,8 +93,15 @@ class UserWindow(FramelessWindow):
 
         # Task area
         self.task_area = QStackedWidget()
-        self.empty_widget = QWidget()
-        self.task_area.addWidget(self.empty_widget)
+
+        self.welcome_page = WelcomePage(self)
+        self.task_area.addWidget(self.welcome_page)
+
+        self.material_page = MaterialPage(self)
+        self.task_area.addWidget(self.material_page)
+
+        self.statistics_page = StatisticsPage(self.db_manager, self.user_id, parent=self)
+        self.task_area.addWidget(self.statistics_page)
 
         self.code_runner = CodeRunner(self.db_manager, parent=self)
         self.task_area.addWidget(self.code_runner)
@@ -129,7 +119,7 @@ class UserWindow(FramelessWindow):
         self.task_area.addWidget(self.debugging_task)
 
         # Initially show the empty widget
-        self.task_area.setCurrentWidget(self.empty_widget)
+        self.task_area.setCurrentWidget(self.welcome_page)
 
         # Create the right layout which will be split into top and bottom layouts
         right_v_layout = QVBoxLayout()
@@ -156,10 +146,36 @@ class UserWindow(FramelessWindow):
         self.setCentralWidget(central_widget)
 
         self.center_window()
-        self.show_speech_bubble()
-        self.setFontSize(10)
 
-    def update_lessons_list(self):
+    def load_user_settings(self):
+        settings = self.db_manager.load_user_settings(self.user_id)
+        if settings:
+            theme = settings.get('theme')
+            font_size = settings.get('font_size')
+
+            if font_size is not None:
+                self.setFontSize(font_size)
+            else:
+                self.setFontSize(10)
+
+            if theme is not None:
+                self.setTheme(theme == 'dark')
+            else:
+                self.setTheme(False)
+
+            self.settings_window.updateLayout(font_size, theme == 'dark')
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.load_user_settings()
+        self.update_lessons_list()
+
+        if self.is_admin:
+            self.switch_to_admin_button.show()
+        else:
+            self.switch_to_admin_button.hide()
+
+    def update_lessons_list(self):  # TODO: A lista alkalmazkodjon jól a betűméret növekedéshez!
         self.lessons_list_widget.clear()
         tasks = self.db_manager.get_tasks()
         completed_tasks = self.db_manager.get_completed_tasks(self.user_id)
@@ -171,75 +187,165 @@ class UserWindow(FramelessWindow):
             if task['id'] in completed_tasks:
                 item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
                 item.setForeground(QColor('gray'))
-                icon = QIcon('resources/images/check_icon.png')
-                item.setIcon(icon)
+                item.setIcon(self.check_icon)
 
             self.lessons_list_widget.addItem(item)
-
-        self.task_area.setCurrentWidget(self.empty_widget)
-
-        if self.is_admin:
-            self.switch_to_admin_button.show()
-        else:
-            self.switch_to_admin_button.hide()
 
     def switch_to_admin_view(self):
         self.hide()
         self.admin_window.show()
 
     def show_speech_bubble(self):
-        self.speech_bubble.move(self.robot_label.mapToGlobal(QPoint(220, -self.speech_bubble.height() // 2)))
-        self.speech_bubble.show()
+        if self.task_area.currentWidget() != self.material_page:
+            self.speech_bubble.move(self.robot_label.mapToGlobal(QPoint(220, -self.speech_bubble.height() // 2)))
+            self.speech_bubble.show()
 
     def toggle_speech_bubble(self, event):
-        if self.speech_bubble.isVisible():
-            self.speech_bubble.hide()
-        else:
-            if len(self.speech_bubble.getText().strip()) != 0:
-                self.show_speech_bubble()
+        if self.task_area.currentWidget() != self.material_page:
+            if self.speech_bubble.isVisible():
+                self.speech_bubble.hide()
+            else:
+                if len(self.speech_bubble.getText().strip()) != 0:
+                    self.show_speech_bubble()
 
     def on_lesson_clicked(self, item):
-        task_id = item.data(Qt.UserRole)  # Retrieve the unique id
-        task_data = self.db_manager.get_task_by_id(task_id)  # Fetch task data using the unique id
+        task_id = item.data(Qt.UserRole)
+        task_data = self.db_manager.get_task_by_id(task_id)
+
         if task_data:
             self.lesson_title.setText(task_data['title'])
             self.speech_bubble.setText(task_data['description'])
             self.toggle_lessons_dropdown()
-            self.show_speech_bubble()
 
-            task_type = task_data['type']
-            if task_type == 'code':
-                self.task_area.setCurrentWidget(self.code_runner)
-                self.code_runner.load_task(task_data, self.user_id)
-            elif task_type == 'drag_and_drop':
-                self.task_area.setCurrentWidget(self.drag_and_drop_task)
-                self.drag_and_drop_task.load_task(task_data, self.user_id)
-            elif task_type == 'matching':
-                self.task_area.setCurrentWidget(self.matching_task)
-                self.matching_task.load_task(task_data, self.user_id)
-            elif task_type == 'quiz':
-                self.task_area.setCurrentWidget(self.quiz_task)
-                self.quiz_task.load_task(task_data, self.user_id)
-            elif task_type == 'debugging':
-                self.task_area.setCurrentWidget(self.debugging_task)
-                self.debugging_task.load_task(task_data, self.user_id)
+            if task_data.get('material'):
+                self.task_area.setCurrentWidget(self.material_page)
+                self.material_page.load_material(task_data['material'])
+                self.material_page.set_start_task_callback(lambda: self.load_task_area(task_data))
+                self.speech_bubble.hide()
             else:
-                self.task_area.setCurrentWidget(self.empty_widget)
+                self.load_task_area(task_data)
         else:
-            QMessageBox.warning(self, "Hiba", "Nem sikerült betölteni a feladatot.")
+            QMessageBox.warning(self, "Error", "Cannot load task")
+
+    def on_statistics_clicked(self):
+        self.current_widget = self.task_area.currentWidget()
+        self.statistics_page.update_task_list()
+        self.statistics_page.update_statistics()
+        self.task_area.setCurrentWidget(self.statistics_page)
+        self.toggle_lessons_dropdown()
+
+    def on_close_statistics(self):
+        if self.current_widget:
+            self.task_area.setCurrentWidget(self.current_widget)
+            self.toggle_lessons_dropdown()
+
+    def load_task_area(self, task_data):
+        task_type = task_data['type']
+        if task_type == 'code':
+            self.task_area.setCurrentWidget(self.code_runner)
+            self.code_runner.load_task(task_data, self.user_id)
+        elif task_type == 'drag_and_drop':
+            self.task_area.setCurrentWidget(self.drag_and_drop_task)
+            self.drag_and_drop_task.load_task(task_data, self.user_id)
+        elif task_type == 'matching':
+            self.task_area.setCurrentWidget(self.matching_task)
+            self.matching_task.load_task(task_data, self.user_id)
+        elif task_type == 'quiz':
+            self.task_area.setCurrentWidget(self.quiz_task)
+            self.quiz_task.load_task(task_data, self.user_id)
+        elif task_type == 'debugging':
+            self.task_area.setCurrentWidget(self.debugging_task)
+            self.debugging_task.load_task(task_data, self.user_id)
+        else:
+            self.task_area.setCurrentWidget(self.welcome_page)
+        self.show_speech_bubble()
+
+    def get_next_task(self, current_task_id):
+        tasks = self.db_manager.get_tasks()
+        completed_tasks = self.db_manager.get_completed_tasks(self.user_id)
+        current_task_index = next((index for (index, task) in enumerate(tasks) if task['id'] == current_task_id), -1)
+
+        # Ha az aktuális feladatot megtaláltuk és van következő feladat
+        if current_task_index != -1:
+            # Iterálunk a következő feladatok között
+            for task in tasks[current_task_index + 1:]:
+                if task['id'] not in completed_tasks:
+                    task_data = self.db_manager.get_task_by_id(task['id'])
+                    self.lesson_title.setText(task_data['title'])
+                    self.speech_bubble.setText(task_data['description'])
+
+                    if task_data.get('material'):
+                        self.task_area.setCurrentWidget(self.material_page)
+                        self.material_page.load_material(task_data['material'])
+                        self.material_page.set_start_task_callback(lambda: self.load_task_area(task_data))
+                        self.speech_bubble.hide()
+                    else:
+                        self.load_task_area(task_data)
+                    return
+
+        QMessageBox.information(self, "Done", "You have completed all tasks!")
 
     def setFontSize(self, size):
+        self.font_size = size
+        self.update_user_menu_style()
+
+        self.lessons_text.setStyleSheet(f"font-size: {size}pt;")
         self.lesson_title.setStyleSheet(f"font-size: {size}pt;")
         self.lessons_list_widget.setStyleSheet(f"font-size: {size}pt;")
         self.user_label.setStyleSheet(f"font-size: {size}pt;")
         self.user_menu_button.setStyleSheet(f"font-size: {size}pt;")
         self.lessons_button.setStyleSheet(f"font-size: {size}pt;")
+        self.statistics_button.setStyleSheet(f"font-size: {size}pt;")
         self.speech_bubble.setStyleSheet(f"font-size: {size}pt;")
         self.switch_to_admin_button.setStyleSheet(f"font-size: {size}pt;")
         self.task_area.setStyleSheet(f"font-size: {size}pt;")
 
+        self.db_manager.save_user_settings(self.user_id, None, size)
+
     def setTheme(self, darkModeEnabled):
+        self.dark_mode_enabled = darkModeEnabled
+        self.update_user_menu_style()
+
         if darkModeEnabled:
+            theme = 'dark'
             self.setStyleSheet("background-color: #333333; color: #ffffff;")
+            self.check_icon = QIcon('resources/images/check_icon_light.png')
+            self.lessons_button.setIcon(QIcon('resources/images/menu_icon_light.png'))
         else:
+            theme = 'light'
             self.setStyleSheet("background-color: #ffffff; color: #000000;")
+            self.check_icon = QIcon('resources/images/check_icon.png')
+            self.lessons_button.setIcon(QIcon('resources/images/menu_icon.png'))
+
+        self.speech_bubble.updateTheme(darkModeEnabled)
+        self.db_manager.save_user_settings(self.user_id, theme, None)
+
+    def update_user_menu_style(self):
+        # Generáljuk le a teljes stíluslapot a betűméret és a téma alapján
+        font_size = getattr(self, 'font_size', 12)  # Alapértelmezett 12, ha nincs megadva
+        dark_mode = getattr(self, 'dark_mode_enabled', False)
+
+        if dark_mode:
+            self.user_menu.setStyleSheet(
+                f"QMenu {{"
+                f"font-size: {font_size}pt;"
+                "background-color: #2c2c2c;"
+                "color: #ffffff;"
+                "border: 1px solid #8f8f91;"
+                "}}"
+                "QMenu::item:selected {"
+                "background-color: #3d3d3d;"
+                "}"
+            )
+        else:
+            self.user_menu.setStyleSheet(
+                f"QMenu {{"
+                f"font-size: {font_size}pt;"
+                "background-color: #ffffff;"
+                "color: #000000;"
+                "border: 1px solid #cfcfcf;"
+                "}}"
+                "QMenu::item:selected {"
+                "background-color: #f0f0f0;"
+                "}"
+            )
