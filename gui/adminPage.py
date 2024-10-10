@@ -34,62 +34,67 @@ class AdminWindow(FramelessWindow):
         self.description_input = QTextEdit()
         self.description_input.setMaximumHeight(100)
         self.description_input.setPlaceholderText("Enter the task description here")
-        self.add_help_icon(self.description_input, "Field format: ")
+        self.add_help_icon(self.description_input, "Summarize the task description.")
 
         self.task_type_selector = QComboBox()
-        self.task_type_selector.addItems(["code", "drag_and_drop", "matching", "quiz", "debugging"])
+        self.task_type_selector.addItems(["code", "drag & drop", "matching", "quiz", "debugging"])
         self.task_type_selector.currentIndexChanged.connect(self.update_task_fields)
         self.task_type_selector.setFixedWidth(300)
 
         self.code_template_input = QTextEdit()
         self.code_template_input.setMaximumHeight(100)
         self.code_template_input.setPlaceholderText("Enter the code template here")
-        self.add_help_icon(self.code_template_input, "Field format: ")
+        self.add_help_icon(self.code_template_input, "Template for the code. \n# Comment out the part that the user "
+                                                     "needs to write.\nAt the end, call the implemented function "
+                                                     "using the print() function, passing it random values.")
 
         self.code_result_input = QTextEdit()
         self.code_result_input.setMaximumHeight(100)
         self.code_result_input.setPlaceholderText("Enter the code result here")
-        self.add_help_icon(self.code_result_input, "Field format: ")
+        self.add_help_icon(self.code_result_input, "[function](val1, val2) #[expected result here]\n"
+                                                   "[function](val3, val4) #[expected result here]\netc.")
 
         self.drag_drop_input = QTextEdit()
         self.drag_drop_input.setMaximumHeight(100)
         self.drag_drop_input.setPlaceholderText("Enter drag & drop items here")
-        self.add_help_icon(self.drag_drop_input, "Field format: ")
+        self.add_help_icon(self.drag_drop_input, "Code snippet with draggable items.\nLines will be mixed up.")
 
         self.matching_input = QTextEdit()
         self.matching_input.setMaximumHeight(100)
         self.matching_input.setPlaceholderText("Enter matching pairs here")
-        self.add_help_icon(self.matching_input, "Field format: ")
+        self.add_help_icon(self.matching_input, "[pair1]:[pair1]\n[pair2]:[pair2]\netc.")
 
         self.quiz_question_input = QTextEdit()
         self.quiz_question_input.setMaximumHeight(100)
         self.quiz_question_input.setPlaceholderText("Enter the quiz question here")
-        self.add_help_icon(self.quiz_question_input, "Field format: ")
+        self.add_help_icon(self.quiz_question_input, "Question that requires selecting the correct answer.")
 
         self.quiz_options_input = QTextEdit()
         self.quiz_options_input.setMaximumHeight(100)
         self.quiz_options_input.setPlaceholderText("Enter the quiz options here")
-        self.add_help_icon(self.quiz_options_input, "Field format: ")
+        self.add_help_icon(self.quiz_options_input, "answer1\nanswer2\netc.")
 
         self.quiz_answer_input = QTextEdit()
         self.quiz_answer_input.setMaximumHeight(100)
         self.quiz_answer_input.setPlaceholderText("Enter the quiz answer here")
-        self.add_help_icon(self.quiz_answer_input, "Field format: ")
+        self.add_help_icon(self.quiz_answer_input, "Correct answer.")
 
         self.debugging_code_input = QTextEdit()
         self.debugging_code_input.setMaximumHeight(100)
         self.debugging_code_input.setPlaceholderText("Enter the debugging code here")
-        self.add_help_icon(self.debugging_code_input, "Field format: ")
+        self.add_help_icon(self.debugging_code_input, "Code snippet with errors to fix.\nUse tabs and indentations as "
+                                                      "necessary.")
 
         self.correct_code_input = QTextEdit()
         self.correct_code_input.setMaximumHeight(100)
         self.correct_code_input.setPlaceholderText("Enter the correct code here")
-        self.add_help_icon(self.correct_code_input, "Field format: ")
+        self.add_help_icon(self.correct_code_input, "Code snippet without errors.\nUse tabs and indentations as "
+                                                    "necessary.")
 
         # Tananyag szövegmező létrehozása, kezdetben elrejtve
         self.material_input = QTextEdit()
-        self.material_input.setPlaceholderText("Write here the metarial for the lesson")
-        self.material_input.setVisible(False)  # Kezdetben rejtve
+        self.material_input.setPlaceholderText("Write here the material for the lesson")
+        self.material_input.setVisible(False)
 
         # Gomb a tananyag mező megnyitásához/becsukásához
         self.material_button = QPushButton("Show Material")
@@ -114,9 +119,6 @@ class AdminWindow(FramelessWindow):
         self.task_fields_widget = QWidget()
         self.task_fields_widget.setLayout(self.form_layout)
 
-        self.database_viewer = DatabaseViewer(self.db_manager, self.user_id)
-        self.database_viewer.table_selector.currentIndexChanged.connect(self.toggle_edit_button)
-
         self.save_button = QPushButton(QIcon('resources/images/run_button.png'), "", self)
         self.save_button.setIconSize(QSize(55, 60))  # Az ikon méretének beállítása
         self.save_button.setFixedSize(55, 50)  # A gomb méretének beállítása
@@ -131,6 +133,9 @@ class AdminWindow(FramelessWindow):
         self.edit_button.setIconSize(QSize(40, 40))
         self.edit_button.setFixedSize(55, 50)
         self.edit_button.clicked.connect(self.edit_task)
+
+        self.database_viewer = DatabaseViewer(self.db_manager, self.user_id, parent=self)
+        self.database_viewer.table_selector.currentIndexChanged.connect(self.toggle_edit_button)
 
         # Add the switch button for user view
         self.switch_to_user_button = QPushButton("Switch to User View", self)
@@ -244,6 +249,16 @@ class AdminWindow(FramelessWindow):
 
             self.settings_window.updateLayout(font_size, isDarkMode)
 
+    def set_button_states(self, index):
+        if index == 0:
+            self.save_button.setEnabled(True)
+            self.delete_button.setEnabled(True)
+            self.edit_button.setEnabled(True)
+        else:
+            self.save_button.setEnabled(False)
+            self.delete_button.setEnabled(True)
+            self.edit_button.setEnabled(False)
+
     def toggle_material_input(self):
         if self.material_button.isChecked():
             self.material_input.setVisible(True)
@@ -333,11 +348,11 @@ class AdminWindow(FramelessWindow):
                     )
                     self.clear_cells()
                 else:
-                    QMessageBox.warning(self, "Rekord létezik", "A rekord már létezik ezzel a címmel.")
+                    QMessageBox.warning(self, "Record Exists", "The record already exists with this title.")
 
             self.database_viewer.load_table_data(self.database_viewer.table_selector.currentIndex())
         else:
-            QMessageBox.warning(self, "Hiányzó mezők", "Minden mező kitöltése kötelező!")
+            QMessageBox.warning(self, "Missing Fields", "All fields are required!")
 
     def clear_cells(self):
         self.title_input.clear()
@@ -357,16 +372,16 @@ class AdminWindow(FramelessWindow):
         self.material_input.setVisible(False)
 
     def delete_task(self):
-        selected_record_id = self.database_viewer.get_selected_record_id()
-        if selected_record_id is not None:
+        selected_record_ids = self.database_viewer.get_selected_record_ids()  # Módosítva, hogy többet adjon vissza
+        if selected_record_ids:
             # Megerősítő párbeszédablak létrehozása
-            reply = QMessageBox.question(self, 'Rekord törlése',
-                                         'Biztosan törölni szeretnéd ezt a rekordot?',
+            reply = QMessageBox.question(self, 'Delete Record(s)',
+                                         'Are you sure you want to delete the selected record(s)?',
                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            # Csak akkor töröljük a rekordot, ha az admin az Igen-t választja
+            # Csak akkor töröljük a rekordokat, ha az admin az Igen-t választja
             if reply == QMessageBox.Yes:
                 table_name = self.database_viewer.table_selector.currentText()
-                self.db_manager.delete(table_name, selected_record_id)
+                self.db_manager.delete(table_name, selected_record_ids)  # Több rekord törlése
                 self.database_viewer.load_table_data(self.database_viewer.table_selector.currentIndex())
         else:
             print("No record is selected for deletion.")
@@ -404,7 +419,7 @@ class AdminWindow(FramelessWindow):
             # Any additional setup required for editing can go here
 
         else:
-            QMessageBox.warning(self, "Nincs kiválasztott rekord", "Kérlek válassz ki egy rekordot a szerkesztéshez.")
+            QMessageBox.warning(self, "No Record Selected", "Please select a record for editing.")
 
     def setFontSize(self, size):
         self.font_size = size
@@ -437,7 +452,8 @@ class AdminWindow(FramelessWindow):
 
         self.database_viewer.setFontSize(size)
 
-        self.db_manager.save_user_settings(self.user_id, None, size)
+        if self.user_id is not None:
+            self.db_manager.save_user_settings(self.user_id, None, size)
 
     def setTheme(self, darkModeEnabled):
         self.dark_mode_enabled = darkModeEnabled
@@ -465,11 +481,11 @@ class AdminWindow(FramelessWindow):
 
         self.database_viewer.toggle_theme(darkModeEnabled)
 
-        self.db_manager.save_user_settings(self.user_id, theme, None)
+        if self.user_id is not None:
+            self.db_manager.save_user_settings(self.user_id, theme, None)
 
     def update_user_menu_style(self):
-        # Generáljuk le a teljes stíluslapot a betűméret és a téma alapján
-        font_size = getattr(self, 'font_size', 12)  # Alapértelmezett 12, ha nincs megadva
+        font_size = getattr(self, 'font_size', 10)
         dark_mode = getattr(self, 'dark_mode_enabled', False)
 
         if dark_mode:

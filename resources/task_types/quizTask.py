@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QRadioButton, QPushButton, QButtonGroup, QMessageBox
-
+import random
 
 class QuizTask(QWidget):
     def __init__(self, db_manager, parent=None):
@@ -17,12 +17,16 @@ class QuizTask(QWidget):
         self.button_group = QButtonGroup()
         self.option_buttons = []
 
+        # Create radio buttons for options
         for _ in range(4):
             radio_button = QRadioButton()
             self.layout.addWidget(radio_button)
             self.button_group.addButton(radio_button)
             self.option_buttons.append(radio_button)
 
+        self.layout.addStretch()
+
+        # Add the submit button at the bottom
         self.submit_button = QPushButton("Check answer")
         self.submit_button.clicked.connect(self.check_answer)
         self.layout.addWidget(self.submit_button)
@@ -34,8 +38,19 @@ class QuizTask(QWidget):
         self.user_id = user_id
         self.question.setText(task_data['quiz_question'])
         options = task_data['quiz_options'].split('\n')
+
+        # Clear previous options
+        for button in self.option_buttons:
+            button.setVisible(False)
+
+        # Shuffle options
+        random.shuffle(options)
+
+        # Set the options to the radio buttons
         for i, option in enumerate(options):
-            self.option_buttons[i].setText(option)
+            if i < len(self.option_buttons):  # Limit to the number of radio buttons
+                self.option_buttons[i].setText(option)
+                self.option_buttons[i].setVisible(True)
 
     def check_answer(self):
         selected_button = self.button_group.checkedButton()
@@ -54,4 +69,3 @@ class QuizTask(QWidget):
                     self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
         else:
             QMessageBox.warning(self, "No Selection", "Please select an option.")
-

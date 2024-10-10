@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QPixmap, QIcon, QFont, QColor
+from PyQt5.QtGui import QPixmap, QIcon, QFont, QColor, QFontMetrics
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QMenu, QAction, QListWidget, \
     QApplication, QStackedWidget, QMessageBox, QListWidgetItem, QDialog
 from baseWindow import FramelessWindow
@@ -175,7 +175,7 @@ class UserWindow(FramelessWindow):
         else:
             self.switch_to_admin_button.hide()
 
-    def update_lessons_list(self):  # TODO: A lista alkalmazkodjon jól a betűméret növekedéshez!
+    def update_lessons_list(self):
         self.lessons_list_widget.clear()
         tasks = self.db_manager.get_tasks()
         completed_tasks = self.db_manager.get_completed_tasks(self.user_id)
@@ -229,7 +229,7 @@ class UserWindow(FramelessWindow):
 
     def on_statistics_clicked(self):
         self.current_widget = self.task_area.currentWidget()
-        self.statistics_page.update_task_list()
+        self.statistics_page.update_task_table()
         self.statistics_page.update_statistics()
         self.task_area.setCurrentWidget(self.statistics_page)
         self.toggle_lessons_dropdown()
@@ -295,12 +295,18 @@ class UserWindow(FramelessWindow):
         self.user_label.setStyleSheet(f"font-size: {size}pt;")
         self.user_menu_button.setStyleSheet(f"font-size: {size}pt;")
         self.lessons_button.setStyleSheet(f"font-size: {size}pt;")
-        self.statistics_button.setStyleSheet(f"font-size: {size}pt;")
+        if size <= 17:
+            self.statistics_button.setStyleSheet(f"font-size: {size}pt;")
+        else:
+            self.statistics_button.setStyleSheet(f"font-size: {17}pt;")
         self.speech_bubble.setStyleSheet(f"font-size: {size}pt;")
         self.switch_to_admin_button.setStyleSheet(f"font-size: {size}pt;")
         self.task_area.setStyleSheet(f"font-size: {size}pt;")
+        self.statistics_page.set_font_size(size)
+        self.code_runner.set_font_size(size)
 
-        self.db_manager.save_user_settings(self.user_id, None, size)
+        if self.user_id is not None:
+            self.db_manager.save_user_settings(self.user_id, None, size)
 
     def setTheme(self, darkModeEnabled):
         self.dark_mode_enabled = darkModeEnabled
@@ -317,8 +323,12 @@ class UserWindow(FramelessWindow):
             self.check_icon = QIcon('resources/images/check_icon.png')
             self.lessons_button.setIcon(QIcon('resources/images/menu_icon.png'))
 
+        self.code_runner.set_theme(darkModeEnabled)
+        self.statistics_page.set_theme(darkModeEnabled)
         self.speech_bubble.updateTheme(darkModeEnabled)
-        self.db_manager.save_user_settings(self.user_id, theme, None)
+
+        if self.user_id is not None:
+            self.db_manager.save_user_settings(self.user_id, theme, None)
 
     def update_user_menu_style(self):
         # Generáljuk le a teljes stíluslapot a betűméret és a téma alapján

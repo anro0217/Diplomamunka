@@ -33,7 +33,7 @@ class CodeEditor(QPlainTextEdit):
 
         self.update_line_number_area_width(0)
         self.highlight_current_line()
-        globalSignals.themeChanged.connect(self.on_theme_changed)
+        #globalSignals.themeChanged.connect(self.on_theme_changed)
 
     def line_number_area_width(self):
         digits = 1
@@ -144,6 +144,39 @@ class CodeEditor(QPlainTextEdit):
         else:
             super().keyPressEvent(e)  # Ensure the base class event is called
 
+    def set_font_size(self, size):
+        """Sets the font size for the code editor."""
+        font = self.font()
+        font.setPointSize(size)
+        self.setFont(font)
+
+        # Also update the font size in the line number area
+        self.line_number_area.update()
+
+    def set_theme(self, is_dark_mode):
+        """Sets the theme of the editor to dark or light mode."""
+        self.is_dark_mode = is_dark_mode
+        if is_dark_mode:
+            # Dark mode: Black background, light text
+            self.setStyleSheet("""
+                QPlainTextEdit {
+                    background-color: #2b2b2b;
+                    color: #dcdcdc;
+                }
+            """)
+            self.line_number_area.setStyleSheet("background-color: #313335; color: #dcdcdc;")
+        else:
+            # Light mode: White background, dark text
+            self.setStyleSheet("""
+                QPlainTextEdit {
+                    background-color: #ffffff;
+                    color: #000000;
+                }
+            """)
+            self.line_number_area.setStyleSheet("background-color: #f0f0f0; color: #000000;")
+
+        self.highlight_current_line(is_dark_mode)
+
 
 class CodeRunner(QWidget):
     def __init__(self, db_manager, parent=None):
@@ -176,72 +209,7 @@ class CodeRunner(QWidget):
 
         self.setLayout(layout)
 
-    def test_user_code(self, user_code, correct_function_calls):
-        # Először bontsuk részekre a megoldás mezőjét
-        sections = correct_function_calls.split('\n')
-
-        function_test_lines = []
-        other_test_lines = []
-        current_section = None
-
-        for line in sections:
-            if 'függvény teszt' in line:
-                current_section = 'function_test'
-            elif 'kiiratás' in line:
-                current_section = 'print_check'
-            else:
-                if current_section == 'function_test':
-                    function_test_lines.append(line.strip())
-                elif current_section == 'print_check':
-                    other_test_lines.append(line.strip())
-
-        # A függvényhívások és az elvárt visszatérési értékek
-        test_cases = []
-        expected_outputs = []
-
-        for call in function_test_lines:
-            if call:
-                function_call, expected_output = call.split('#')
-                test_cases.append(function_call.strip())
-                expected_outputs.append(expected_output.strip())
-
-        # A kimenet ellenőrzése
-        print_tests = []
-        for check in other_test_lines:
-            if 'print(' in check:
-                print_tests.append(check.strip())
-
-        # A felhasználó kódját futtatjuk
-        try:
-            user_namespace = {}
-            exec(user_code, user_namespace)
-
-            # Teszteljük a függvény visszatérési értékeit
-            for i, test_case in enumerate(test_cases):
-                result = eval(test_case, user_namespace)
-                expected_result = eval(expected_outputs[i])
-                if repr(result) != repr(expected_result):
-                    return False, f"Test failed: {test_case} expected {expected_result}, but got {result}"
-
-            # Teszteljük a print outputokat
-            output = StringIO()
-            with redirect_stdout(output):
-                for test in print_tests:
-                    exec(test, user_namespace)
-            printed_output = output.getvalue().strip().split('\n')
-
-            for i, test in enumerate(print_tests):
-                test_output = eval(test[test.find('(') + 1:test.find(')')], user_namespace)
-                if str(test_output) != printed_output[i]:
-                    return False, f"Print test failed: expected {test_output}, but got {printed_output[i]}"
-
-        except Exception as e:
-            return False, str(e)
-
-        return True, "All tests passed."
-
     def run_code(self):
-        self.output_window.setPlainText(self.code_editor.run_code_and_capture_output())
         result, message = self.test_user_code(self.code_editor.toPlainText(), self.task_data['code_result'])
         if result:
             QMessageBox.information(self, "Correct", "Your solution is correct!")
@@ -254,6 +222,64 @@ class CodeRunner(QWidget):
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
 
+    def test_user_code(self, code_editor_input, test_cases):
+        # 1. Check if only the function body was modified
+        template_lines = self.task_data['code_template'].splitlines()
+        user_code_lines = code_editor_input.splitlines()
+
+        # Check the function header and the print statement at the end
+        if user_code_lines[0] != template_lines[0] or user_code_lines[-1] != template_lines[-1]:
+            return False, "You cannot modify the function header or the print statement at the end!"
+
+        # Ensure that the function body has been modified (after the comment)
+        if user_code_lines[1] == template_lines[1]:
+            return False, "You haven't modified the function body yet!"
+
+        # 2. Run the user's code and capture output
+        output = StringIO()
+        user_globals = {}
+        try:
+            with redirect_stdout(output):
+                exec(code_editor_input, user_globals)
+            # Output the result to the output window
+            self.output_window.setPlainText(output.getvalue())
+        except Exception as e:
+            return False, f"Error occurred while running the code: {str(e)}"
+
+        # 3. Check the provided test cases and calculate the success rate
+        total_tests = 0
+        passed_tests = 0
+
+        for test_case in test_cases.splitlines():
+            if test_case.strip():  # Skip empty lines
+                total_tests += 1
+
+                # Split the test case into input and expected output
+                test_input, expected_output = test_case.split('#')
+                test_input = test_input.strip()
+                expected_output = expected_output.strip()
+
+                # Run the test case
+                try:
+                    actual_output = eval(test_input, user_globals)
+                    if str(actual_output) == expected_output:
+                        passed_tests += 1
+                except Exception:
+                    continue  # Test fails if any exception occurs
+
+        # Calculate the percentage of passed tests
+        success_rate = (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+
+        # Provide feedback based on success rate
+        if success_rate == 100:
+            return True, ""
+        if success_rate > 66:
+            return False, "Almost correct, but not perfect."
+        elif success_rate > 33:
+            return False, "Something is still wrong."
+        else:
+            return False, "Incorrect solution."
+
     def clear(self):
         self.code_editor.clear()
         self.output_window.clear()
@@ -263,3 +289,9 @@ class CodeRunner(QWidget):
         self.user_id = user_id
         self.code_editor.setPlainText(task_data['code_template'])
         self.output_window.clear()
+
+    def set_theme(self, is_dark_mode):
+        self.code_editor.set_theme(is_dark_mode)
+
+    def set_font_size(self, size):
+        self.code_editor.set_font_size(size)

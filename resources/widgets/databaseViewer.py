@@ -6,10 +6,11 @@ from resources.utils.globalSignals import globalSignals
 
 
 class DatabaseViewer(QWidget):
-    def __init__(self, db_manager, user_id):
+    def __init__(self, db_manager, user_id, parent=None):
         super().__init__()
         self.db_manager = db_manager
         self.user_id = user_id
+        self.parent_window = parent
         self.initUI()
         globalSignals.themeChanged.connect(self.toggle_theme)
         globalSignals.fontSizeChanged.connect(self.setFontSize)
@@ -19,7 +20,7 @@ class DatabaseViewer(QWidget):
 
         self.table_selector = QComboBox()
         self.layout.addWidget(self.table_selector)
-        self.table_selector.currentIndexChanged.connect(self.load_table_data)
+        self.table_selector.currentIndexChanged.connect(self.on_table_selector_changed)
 
         # Adatok megjelenítésére szolgáló táblázat
         self.data_table = QTableWidget()
@@ -38,6 +39,10 @@ class DatabaseViewer(QWidget):
             else:
                 self.set_light_mode()
 
+    def on_table_selector_changed(self, index):
+        self.load_table_data(index)
+        self.parent_window.set_button_states(index)
+
     def load_table_names(self):
         tables = self.db_manager.get_table_names()
 
@@ -46,7 +51,7 @@ class DatabaseViewer(QWidget):
             tables.remove('sqlite_sequence')
 
         # Sorrend beállítása
-        ordered_tables = ['tasks', 'user_tasks', 'users']
+        ordered_tables = ['tasks', 'user_tasks', 'users', 'user_settings']
         other_tables = [table for table in tables if table not in ordered_tables]
         self.table_selector.addItems(ordered_tables + other_tables)
 
@@ -139,6 +144,21 @@ class DatabaseViewer(QWidget):
         id_column_index = 0  # Feltételezzük, hogy az ID az első oszlopban van
         selected_record_id = self.data_table.item(selected_row, id_column_index).text()
         return int(selected_record_id)
+
+    def get_selected_record_ids(self):
+        selected_indexes = self.data_table.selectionModel().selectedRows()
+        if not selected_indexes:  # Ha nincs kiválasztott sor
+            return []
+
+        selected_record_ids = []
+        id_column_index = 0  # Feltételezzük, hogy az ID az első oszlopban van
+
+        for index in selected_indexes:
+            selected_row = index.row()
+            selected_record_id = self.data_table.item(selected_row, id_column_index).text()
+            selected_record_ids.append(int(selected_record_id))
+
+        return selected_record_ids
 
     def setFontSize(self, size):
         font = QFont()

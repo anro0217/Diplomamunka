@@ -72,7 +72,7 @@ class DatabaseManager:
             )
         ''')
 
-        #c.execute('''DROP TABLE user_tasks''')
+        # c.execute('''DROP TABLE user_tasks''')
 
         conn.commit()
         conn.close()
@@ -262,19 +262,23 @@ class DatabaseManager:
         conn.commit()
         conn.close()
 
-    def delete(self, table_name, record_id):
+    def delete(self, table_name, record_ids):
         try:
             conn = sqlite3.connect(self.db_file)
             c = conn.cursor()
 
             # Kapcsolódó rekordok törlése a user_tasks táblából
             if table_name == "tasks":
-                c.execute("DELETE FROM user_tasks WHERE task_id = ?", (record_id,))
+                placeholders = ', '.join(['?'] * len(record_ids))  # Kérdőjelek generálása
+                c.execute(f"DELETE FROM user_tasks WHERE task_id IN ({placeholders})", record_ids)
             elif table_name == "users":
-                c.execute("DELETE FROM user_tasks WHERE user_id = ?", (record_id,))
+                placeholders = ', '.join(['?'] * len(record_ids))  # Kérdőjelek generálása
+                c.execute(f"DELETE FROM user_tasks WHERE user_id IN ({placeholders})", record_ids)
 
-            query = f"DELETE FROM {table_name} WHERE id = ?"
-            c.execute(query, (record_id,))
+            # Rekordok törlése a fő táblából
+            placeholders = ', '.join(['?'] * len(record_ids))  # Kérdőjelek generálása
+            query = f"DELETE FROM {table_name} WHERE id IN ({placeholders})"
+            c.execute(query, record_ids)
             conn.commit()
 
             if table_name == "tasks":
@@ -474,18 +478,25 @@ class DatabaseManager:
         conn = sqlite3.connect(self.db_file)
         c = conn.cursor()
 
-        # Ellenőrizzük, hogy létezik-e a beállítás
-        c.execute("SELECT * FROM user_settings WHERE user_id=?", (user_id,))
+        c.execute("SELECT theme, font_size FROM user_settings WHERE user_id=?", (user_id,))
         result = c.fetchone()
 
         if result:
-            # Frissítjük a meglévő beállításokat
-            if theme is not None and font_size is not None:
-                c.execute("UPDATE user_settings SET theme=?, font_size=? WHERE user_id=?", (theme, font_size, user_id))
-            elif theme is not None:
-                c.execute("UPDATE user_settings SET theme=? WHERE user_id=?", (theme, user_id))
-            elif font_size is not None:
-                c.execute("UPDATE user_settings SET font_size=? WHERE user_id=?", (font_size, user_id))
+            current_theme, current_font_size = result  # A jelenlegi beállítások
+
+            # Csak akkor frissítjük, ha az új beállítások eltérnek a régiektől
+            updated = False
+            if theme is not None and theme != current_theme:
+                current_theme = theme
+                updated = True
+            if font_size is not None and font_size != current_font_size:
+                current_font_size = font_size
+                updated = True
+
+            if updated:
+                c.execute("UPDATE user_settings SET theme=?, font_size=? WHERE user_id=?",
+                          (current_theme, current_font_size, user_id))
+
         else:
             # Új beállításokat adunk hozzá, ha egyik sem létezik
             c.execute("INSERT INTO user_settings (user_id, theme, font_size) VALUES (?, ?, ?)",
@@ -515,7 +526,7 @@ class DatabaseManager:
         conn = sqlite3.connect(self.db_file)
         c = conn.cursor()
 
-        c.execute("SELECT task_id, status, failures FROM user_tasks WHERE user_id = ?",(user_id,))
+        c.execute("SELECT task_id, status, failures FROM user_tasks WHERE user_id = ?", (user_id,))
         results = c.fetchall()
         conn.close()
 
@@ -527,7 +538,7 @@ class DatabaseManager:
         # Teljesítési arány és pontosság kiszámítása
         completion_rate = (completed_tasks / total_tasks * 100) if total_tasks > 0 else 0
         accuracy = (completed_tasks / (
-                    completed_tasks + total_failures) * 100) if completed_tasks + total_failures > 0 else 0
+                completed_tasks + total_failures) * 100) if completed_tasks + total_failures > 0 else 0
 
         return {
             "total_tasks": total_tasks,
@@ -536,3 +547,14 @@ class DatabaseManager:
             "completion_rate": completion_rate,
             "accuracy": accuracy
         }
+
+    def get_user_tasks(self, user_id):
+        conn = sqlite3.connect(self.db_file)
+        c = conn.cursor()
+
+        c.execute("SELECT t.id, t.title, ut.status, ut.failures FROM user_tasks ut JOIN tasks t ON ut.task_id = t.id "
+                  "WHERE ut.user_id = ?", (user_id,))
+        results = c.fetchall()
+        conn.close()
+
+        return results
