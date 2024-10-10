@@ -1,11 +1,8 @@
 Tényleges TODO:
 -kb 40 feladattal feltölteni az adatbázist
--a végére kiértékelni a felhasználó teljesítményét
--tananyag oldalakat megvalósítani, valamint üdvözlő oldal
 
--sötét téma és betűméret állítása, settingsben fullscreen lehetőség (talán)
+-settingsben fullscreen lehetőség
 -code runner osztály implementálása: kód ellenőrzés assetekkel, output ellenőrzése (bonyolult, kevés kell belőle)
--felh. váltáskor törölni a cím és robot mezőket
 -Név + ikon
 
 
