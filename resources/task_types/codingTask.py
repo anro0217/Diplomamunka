@@ -1,3 +1,4 @@
+import builtins
 import sys
 from contextlib import redirect_stdout
 from io import StringIO
@@ -75,7 +76,7 @@ class CodeEditor(QPlainTextEdit):
 
     def get_highlight_color(self, is_dark_mode=False):
         if is_dark_mode:
-            return QColor(Qt.green).lighter(140)
+            return QColor(0, 153, 51)
         else:
             return QColor(Qt.yellow).lighter(160)
 
@@ -178,6 +179,13 @@ class CodeEditor(QPlainTextEdit):
         self.highlight_current_line(is_dark_mode)
 
 
+def safe_open(filename):
+    # Allow only reading from 'readingFrom.txt'
+    if filename != 'readingFrom.txt':
+        return None, "Unauthorized file access attempt!"
+    return open(filename, 'r')
+
+
 class CodeRunner(QWidget):
     def __init__(self, db_manager, parent=None):
         super().__init__(parent)
@@ -222,6 +230,9 @@ class CodeRunner(QWidget):
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
 
+    from io import StringIO
+    from contextlib import redirect_stdout
+
     def test_user_code(self, code_editor_input, test_cases):
         # 1. Check if only the function body was modified
         template_lines = self.task_data['code_template'].splitlines()
@@ -237,7 +248,13 @@ class CodeRunner(QWidget):
 
         # 2. Run the user's code and capture output
         output = StringIO()
-        user_globals = {}
+        user_globals = {
+            '__builtins__': {
+                'print': builtins.print,
+                'open': safe_open
+            }
+        }
+
         try:
             with redirect_stdout(output):
                 exec(code_editor_input, user_globals)
@@ -261,9 +278,20 @@ class CodeRunner(QWidget):
 
                 # Run the test case
                 try:
+                    # Evaluate the test input
                     actual_output = eval(test_input, user_globals)
-                    if str(actual_output) == expected_output:
+
+                    # Check if the function has no return value
+                    if actual_output is None:
+                        # Compare expected output with actual output captured
+                        actual_output = output.getvalue().strip()
+                    else:
+                        actual_output = str(actual_output)
+
+                    if actual_output == expected_output.replace('|', '\n'):
                         passed_tests += 1
+                    else:
+                        print("-----\nKimenet:\n" + actual_output + "\nElvárt kimenet:\n" + expected_output.replace('|', '\n'))
                 except Exception:
                     continue  # Test fails if any exception occurs
 

@@ -26,10 +26,14 @@ class DebuggingTask(QWidget):
         self.code_editor.setPlainText(task_data['debugging_code'])
 
     def check_code(self):
-        user_code = self.code_editor.toPlainText()
-        correct_code = self.task_data['correct_code']
+        user_code = self.code_editor.toPlainText().strip()  # Strip whitespace from user code
+        correct_code = self.task_data['correct_code'].strip()
 
-        if user_code.strip() == correct_code.strip():
+        # Split the correct_code into possible correct solutions
+        correct_solutions = correct_code.split('///')
+
+        # Check if the user's code matches any of the correct solutions
+        if any(user_code == solution.strip() for solution in correct_solutions):
             QMessageBox.information(self, "Correct", "Your solution is correct!")
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.mark_task_as_completed(self.user_id, self.task_data['id'])
@@ -39,4 +43,6 @@ class DebuggingTask(QWidget):
             QMessageBox.warning(self, "Incorrect", "Your solution is incorrect.")
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
+
+
 

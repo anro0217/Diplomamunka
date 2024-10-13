@@ -1,0 +1,297 @@
+[
+    {
+        "title": "Introduction to Python and Printing",
+        "description": "Write a Python program that prints the message 'Hello World!'.",
+        "type": "code",
+        "code_template": "def print_message():\n    # Overwrite this line!'\n\nprint_message()",
+        "code_result": "print_message() #Hello World!",
+        "material": "In this section, you will learn about the basics of Python programming. Python is a versatile and widely-used programming language, known for its simplicity and readability. One of the first things you will do in Python is to print output to the console. Printing is an essential part of programming, as it allows you to display messages, results, and data to users.\n\nTo print a message in Python, you will use the built-in function `print()`. This function takes a string (a sequence of characters) as an argument and outputs it to the screen. For example, to print 'Hello, World!', you would write `print('Hello, World!')`. This program will help you get familiar with the syntax of Python and understand how functions work."
+    },
+    {
+        "title": "Using Variables in Python",
+        "description": "Fix the code that assigns a number to a variable and then prints the value of that variable.",
+        "type": "debugging",
+        "debugging_code": "x = 5\nprint(y)",
+        "correct_code": "x = 5\nprint(x)",
+        "material": "Variables are a fundamental concept in programming. A variable is essentially a name that refers to a value stored in the computer's memory. In Python, you can create a variable by simply assigning a value to it using the `=` operator. For example, to create a variable called `x` and assign it the value of 5, you would write `x = 5`.\n\nOnce you have assigned a value to a variable, you can use that variable in your program. To output the value of a variable, you can use the `print()` function. It is important to note that variable names are case-sensitive in Python, meaning that `x` and `X` would refer to two different variables. In this exercise, you will correct the code to properly print the value of the variable."
+    },
+    {
+        "title": "Basic Data Types",
+        "description": "Which of the following data types does NOT exist in Python?",
+        "type": "quiz",
+        "quiz_question": "Which of the following is NOT a basic data type in Python?",
+        "quiz_options": "Integer\nString\nBoolean\nCharacter",
+        "quiz_answer": "Character",
+        "material": "Understanding basic data types is crucial for programming in Python. Python has several built-in data types that are used to store values. The most commonly used data types include:\n\n1. **Integer**: Represents whole numbers, both positive and negative (e.g., -1, 0, 42).\n2. **Float**: Represents decimal numbers (e.g., 3.14, -0.001).\n3. **String**: Represents a sequence of characters enclosed in quotes (e.g., 'Hello', '123').\n4. **Boolean**: Represents one of two values: `True` or `False`.\n\nIt is essential to know that Python does not have a specific data type called 'Character' as some other programming languages do. Instead, a single character is considered a string of length one."
+    },
+    {
+        "title": "String Operations",
+        "description": "Rearrange the code lines to create a program that prints the user's name.",
+        "type": "drag & drop",
+        "drag_drop_items": "def greet():\n    name = input('What is your name? ')\n    print('Welcome, ' + name + '!')",
+        "material": "Strings are an important data type in Python. They are used to represent text and can be manipulated using various operations. In this task, you will learn how to get user input and concatenate strings.\n\nTo obtain user input, you can use the `input()` function. This function prompts the user to enter some data, which can then be stored in a variable. For example, if you want to ask the user for their name, you would write `name = input('What is your name? ')`. \n\nOnce you have the user's name, you can use string concatenation to create a greeting message. This involves combining strings together using the `+` operator. You will print the welcome message using the `print()` function."
+    },
+    {
+        "title": "Working with Numbers",
+        "description": "Match the following mathematical operations with their corresponding expressions.",
+        "type": "matching",
+        "matching_pairs": "Addition:a + b\nSubtraction:a - b\nMultiplication:a * b\nDivision:a / b\nExponentiation:a ** b\nFloor Division:a // b",
+        "material": "Mathematical operations are fundamental to programming. In Python, you can perform arithmetic operations using operators:\n\n- **Addition (+)**: Combines two values (e.g., `3 + 5` results in `8`).\n- **Subtraction (-)**: Calculates the difference between two values (e.g., `10 - 4` results in `6`).\n- **Multiplication (*)**: Multiplies two values (e.g., `6 * 7` results in `42`).\n- **Division (/)**: Divides one value by another (e.g., `8 / 2` results in `4`).\n\nUnderstanding how to use these operations will help you perform calculations and manipulate numerical data effectively."
+    },
+    {
+        "title": "Comments in Python",
+        "description": "Use a comment to prevent the printing of unnecessary message.\nEnsure to use a space after the comment sign for better readability!",
+        "type": "debugging",
+        "debugging_code": "x = 10\nprint(f'Value of x is: {x}')\nprint('This message should not be printed.')",
+        "correct_code": "x = 10\nprint(f'Value of x is: {x}')\n# print('This message should not be printed.')///x = 10\nprint(f'Value of x is: {x}')\n#print('This message should not be printed.')",
+        "material": "Comments are an essential part of writing readable and maintainable code. They allow you to annotate your code with explanations, making it easier for others (and yourself) to understand what the code is doing.\n\nIn Python, comments start with a `#` symbol. Everything after the `#` on that line will be ignored by the Python interpreter. You should use comments to clarify complex code, explain the purpose of variables, and outline the logic of your program. In this exercise, you will improve the clarity of the comments in the provided code."
+    },
+    {
+        "title": "Taking User Input",
+        "description": "What is the correct Python syntax for handling user input?",
+        "type": "quiz",
+        "quiz_question": "Which function should you use to collect data from a user in Python?",
+        "quiz_options": "input()\nget()\nread()\nscan()",
+        "quiz_answer": "input()",
+        "material": "Taking user input is a critical aspect of interactive programming. In Python, you can collect user input using the `input()` function. This function prompts the user for input and returns it as a string.\n\nFor example, `user_input = input('Please enter your name: ')` would display the prompt 'Please enter your name: ' on the screen, and the user can type their response. Remember that the input will always be returned as a string, so if you need to use it as a different data type (e.g., integer), you'll need to convert it using functions like `int()` or `float()`."
+    },
+    {
+        "title": "Basic Arithmetic Operations",
+        "description": "Create a program that defines a function named \"add\". This function should take two numbers as parameters, calculate their sum, and display the result.",
+        "type": "code",
+        "code_template": "def add(a, b):\n    # Implement the addition logic!\n\nprint(add(5, 3))",
+        "code_result": "add(5, 3) #8\nadd(0, 2) #2\nadd(-1, 2) #1\nadd(99, 11) #110",
+        "material": "Arithmetic operations are essential in programming. In this task, you will create a function that performs addition. Functions are reusable pieces of code that you can call multiple times.\n\nTo create a function in Python, you use the `def` keyword followed by the function name and parentheses containing any parameters. For instance, `def add(a, b):` defines a function named `add` that takes two parameters, `a` and `b`. You will implement the addition inside the function and return the result. After that, you'll call the function with example values and print the result using the `print()` function."
+    },
+    {
+      "title": "Comparison Operators",
+      "description": "Which expression gives the correct result?",
+      "type": "matching",
+      "matching_pairs": "==: Equal to\n!=: Not equal to\n>: Greater than\n<: Less than",
+      "material": "Comparison operators are used to compare values and return a boolean result (`True` or `False`). Understanding these operators is crucial for making decisions in your programs.\n\nHere are the most common comparison operators in Python:\n- **==**: Checks if two values are equal.\n- **!=**: Checks if two values are not equal.\n- **>**: Checks if the left value is greater than the right value."
+    },
+    {
+      "title": "Boolean Values and Logic",
+      "description": "Match the Boolean expressions with their correct outputs.",
+      "type": "matching",
+      "matching_pairs": "True and True: True\nTrue and False: False\nFalse or True: True\nnot True: False",
+      "material": "Boolean values are fundamental in programming and are used to represent truth values. In Python, there are two boolean values: `True` and `False`. Logical operations allow you to combine and manipulate these values. \n\n- The **and** operator returns `True` if both operands are `True`, otherwise it returns `False`.\n- The **or** operator returns `True` if at least one operand is `True`. If both are `False`, it returns `False`.\n- The **not** operator inverts the boolean value; it turns `True` into `False` and `False` into `True`.\n\nIn this exercise, you will match boolean expressions with their outputs to understand how logical operators work."
+    },
+    {
+        "title": "Conditional Statements: if-else",
+        "description": "Write a program that checks if a number is positive, negative, or zero and returns it as a string.",
+        "type": "code",
+        "code_template": "def check_number(num):\n    # return positive, negative, or zero\n\nprint(check_number(5))",
+        "code_result": "check_number(-2) #negative\ncheck_number(0) #zero\ncheck_number(1) #positive",
+        "material": "Conditional statements, also known as if-else statements, allow you to execute different code blocks based on certain conditions. In Python, you can use the `if`, `elif`, and `else` keywords to create these conditions.\n\nIn this task, you will write a function that takes a number as input and checks whether it is positive, negative, or zero. Understanding conditional statements is essential for controlling the flow of your program and making decisions based on user input or data."
+    },
+    {
+        "title": "Nested if Statements",
+        "description": "Debug the following code that checks if a number is even or odd and greater than zero.\nIt only handles zero and positive numbers.\nFix it to handle negative numbers as well!",
+        "type": "debugging",
+        "debugging_code": "def check_even_or_odd(num):\n    if num == 0:\n        return 'Zero is neither even nor odd'\n    elif num > 0:\n        if num % 2 == 0:\n            return 'Even'\n        else:\n            return 'Odd'\n\nprint(check_even_or_odd(4))\nprint(check_even_or_odd(0))\nprint(check_even_or_odd(-3))",
+        "correct_code": "def check_even_or_odd(num):\n    if num == 0:\n        return 'Zero is neither even nor odd'\n    else:\n        if num % 2 == 0:\n            return 'Even'\n        else:\n            return 'Odd'\n\nprint(check_even_or_odd(4))\nprint(check_even_or_odd(0))\nprint(check_even_or_odd(-3))///def check_even_or_odd(num):\n    if num == 0:\n        return 'Zero is neither even nor odd'\n    elif num > 0:\n        if num % 2 == 0:\n            return 'Even'\n        else:\n            return 'Odd'\n    else:\n         if num % 2 == 0:\n            return 'Even'\n        else:\n            return 'Odd'\n\nprint(check_even_or_odd(4))\nprint(check_even_or_odd(0))\nprint(check_even_or_odd(-3))",
+        "material": "Nested if statements allow you to check multiple conditions in a structured manner. When you have an if statement inside another if statement, it can help refine the conditions being checked.\n\nIn this debugging exercise, you will analyze a function that checks if a number is even or odd and ensure that the logic is correct. Debugging nested statements can help you understand how to manage multiple conditions effectively."
+    },
+    {
+        "title": "The while Loop",
+        "description": "Use a while loop to print numbers from 1 to 5.",
+        "type": "drag & drop",
+        "drag_drop_items": "counter = 1\nwhile counter <= 5:\n    print(counter)\n    counter += 1",
+        "material": "The while loop allows you to execute a block of code repeatedly as long as a specified condition is true. This is particularly useful when the number of iterations is not predetermined.\n\nIn this task, you will use drag and drop elements to arrange the code that will print numbers from 1 to 5 using a while loop. Understanding how to control loop execution is crucial for programming efficiency."
+    },
+    {
+        "title": "The for Loop",
+        "description": "Write a program that uses a for loop to print each character in a string.",
+        "type": "code",
+        "code_template": "def print_characters(string):\n    # Print each character in the string\n\nprint_characters('Hello')",
+        "code_result": "print_characters('Hello') #H|e|l|l|o",
+        "material": "For loops are commonly used to iterate over sequences such as lists, strings, and tuples. They allow you to execute a block of code for each item in the sequence.\n\nIn this task, you will create a function that uses a for loop to print each character in a given string. This exercise will help you understand how to work with strings and iterate through their characters effectively."
+    },
+    {
+        "title": "Loop Control: break and continue",
+        "description": "Use break and continue statements in a loop to control its execution.\nThe loop should iterate from 1 to 33, skipping even numbers and stopping when reaching 33.",
+        "type": "drag & drop",
+        "drag_drop_items": "for number in range(1, 99):\n    if number % 2 == 0:\n        continue\n    if number == 33:\n        break\n    print(number)",
+        "material": "Loop control statements such as `break` and `continue` allow you to modify the behavior of loops. `break` is used to exit a loop prematurely, while `continue` skips the current iteration and proceeds to the next one.\n\nIn this task, you will use drag and drop elements to arrange the code that incorporates break and continue statements. Understanding how to control loop execution can greatly enhance your programming skills."
+    },
+    {
+        "title": "Using the range() Function",
+        "description": "Choose the correct answer",
+        "type": "quiz",
+        "quiz_question": "What will be the following code output in order?\nfor i in range(5):\n    print(i)",
+        "quiz_options": "0,1,2,3,4\n1,2,3,4,5\n0,1,2,3,4,5\n5",
+        "quiz_answer": "0,1,2,3,4",
+        "material": "The `range()` function generates a sequence of numbers, which is commonly used in for loops. It can take one, two, or three arguments to determine the start, stop, and step of the sequence.\n\nIn this quiz, you will test your understanding of how the `range()` function works and what output it produces in a for loop. This knowledge is essential for controlling iterations effectively."
+    },
+    {
+        "title": "Lists in Python",
+        "description": "Use drag and drop to arrange the code lines to create a list of your favorite fruits. The list should include 'apple', 'banana', and 'cherry' in order.",
+        "type": "drag & drop",
+        "drag_drop_items": "fruits = []\nfruits.append('apple')\nfruits.append('banana')\nfruits.append('cherry')\nprint(fruits)|fruits = []\nfruits.append('apple')\nfruits.append('cherry')\nfruits.append('banana')\nprint(fruits)|fruits = []\nfruits.append('banana')\nfruits.append('apple')\nfruits.append('cherry')\nprint(fruits)|fruits = []\nfruits.append('banana')\nfruits.append('cherry')\nfruits.append('apple')\nprint(fruits)|fruits = []\nfruits.append('cherry')\nfruits.append('apple')\nfruits.append('banana')\nprint(fruits)|fruits = []\nfruits.append('cherry')\nfruits.append('banana')\nfruits.append('apple')\nprint(fruits)",
+        "material": "Lists in Python allow you to store multiple items in a single variable. In this task, you will learn how to create a list and add elements to it using the `append()` method. Arranging the lines in the correct order will help you understand how to work with lists effectively."
+    },
+    {
+        "title": "Accessing List Elements",
+        "description": "Debug the following code that accesses the first element of a list.",
+        "type": "debugging",
+        "debugging_code": "fruits = ['apple', 'banana', 'cherry']\n\n# Print the first element of the list\nprint(fruits[1])",
+        "correct_code": "fruits = ['apple', 'banana', 'cherry']\n\n# Print the first element of the list\nprint(fruits[0])",
+        "material": "Accessing elements in a list is done using indexing, which allows you to retrieve or modify specific items. In Python, list indexing starts at 0.\n\nIn this debugging exercise, you will analyze a code snippet that accesses the first element of a list. This will help you understand how to work with indexes effectively and avoid common mistakes related to list access."
+    },
+    {
+        "title": "Modifying Lists",
+        "description": "Match the operations with their effects on the list.",
+        "type": "matching",
+        "matching_pairs": "append('grape'):Add 'grape' to the end of the list\nremove('banana'):Remove 'banana' from the list\ninsert(1, 'orange'):Insert 'orange' at index 1\npop():Remove the last element from the list",
+        "material": "Lists in Python are mutable, meaning you can change their content after creation. You can add, remove, and modify items in a list using various methods.\n\nIn this task, you will match different list operations with their corresponding effects. Understanding how to modify lists is essential for managing data in your programs."
+    },
+    {
+        "title": "List Operations",
+        "description": "Use drag and drop to arrange the code lines to perform basic operations on lists.\nCombined list must contain all numbers between 1 and 9!",
+        "type": "drag & drop",
+        "drag_drop_items": "numbers = [1, 2, 3, 4, 5]\nnumbers.append(6)\nfirst_three = numbers[:3]\ncombined_list = numbers + [7, 8, 9]\nprint(f'Sliced: {first_three}, Combined: {combined_list})|numbers = [1, 2, 3, 4, 5]\nfirst_three = numbers[:3]\nnumbers.append(6)\ncombined_list = numbers + [7, 8, 9]\nprint(f'Sliced: {first_three}, Combined: {combined_list})",
+        "material": "In Python, you can perform various operations on lists such as addition, slicing, and concatenation. Understanding how to manipulate lists is crucial for data management and programming efficiency. In this task, you will arrange code lines to create a list, add an element, slice the list, and combine it with another list."
+    },
+    {
+        "title": "Working with Tuples",
+        "description": "Select the correct answer.",
+        "type": "quiz",
+        "quiz_question": "Which of the following statements about tuples is true?",
+        "quiz_options": "Tuples are mutable.\nTuples can contain duplicate elements.\nTuples are created using square brackets.\nTuples do not support indexing.",
+        "quiz_answer": "Tuples can contain duplicate elements.",
+        "material": "Tuples are similar to lists in that they can store multiple items, but they have a few key differences. Tuples are immutable, meaning once created, their elements cannot be changed. They are defined using parentheses instead of square brackets, and they can also contain duplicate values. Understanding these characteristics is crucial for selecting the right data structure in Python."
+    },
+    {
+        "title": "Dictionaries in Python",
+        "description": "Which one is the correct answer?",
+        "type": "quiz",
+        "quiz_question": "What will the following code output?\n\nmy_dict = {'name': 'Alice', 'age': 25}\nprint(my_dict['age'])\n",
+        "quiz_options": "Alice\n25\nKeyError\n{}",
+        "quiz_answer": "25",
+        "material": "Dictionaries are collections of key-value pairs, where each key is unique and is used to access its corresponding value. They are defined using curly braces and are ideal for cases where you need to associate values with specific identifiers. In this quiz, you will test your understanding of how to access dictionary elements."
+    },
+    {
+        "title": "Accessing and Modifying Dictionary Elements",
+        "description": "Match the operations with their effects on the dictionary.",
+        "type": "matching",
+        "matching_pairs": "my_dict['age'] = 30:Update the value of 'age' to 30\ndel my_dict['name']:Remove the 'name' key from the dictionary\nmy_dict['city'] = 'New York':Add a new key-value pair for 'city'\nmy_dict.get('name'):Access the value associated with 'name'",
+        "material": "Accessing and modifying elements in a dictionary is straightforward in Python. You can use the key to retrieve values, update existing values, add new key-value pairs, and delete entries as needed. In this task, you will match different dictionary operations with their effects to enhance your understanding of how dictionaries work."
+    },
+    {
+        "title": "Sets in Python",
+        "description": "Write a program that can intersection and union two sets based on the chosen mode.",
+        "type": "code",
+        "code_template": "def set_operations(set1, set2, mode):\n    # Switch between I and U (intersection and union)\n\nprint(set_operations({1, 2, 3}, {3, 4, 5}, 'I'))",
+        "code_result": "set_operations({1,2,3},{3,4,5},'U') #{1, 2, 3, 4, 5}\nset_operations({1,2,3},{3,4,5},'I') #{3}",
+        "material": "Sets are a unique data structure in Python that store unordered collections of unique elements. They are useful for operations involving membership testing, eliminating duplicate entries, and performing mathematical set operations like union, intersection, and difference.\n\nIn this task, you will create a program to demonstrate basic set operations using two sets. Understanding sets is important for data manipulation and analysis in Python."
+    },
+    {
+        "title": "Creating and Using Functions",
+        "description": "Debug the following code that defines and calls a function.",
+        "type": "debugging",
+        "debugging_code": "def greet(name):\n    print('Hello, + name')\n\n# Greetings to John Doe\ngreet('John Doe')",
+        "correct_code": "def greet(name):\n    print('Hello, '+ name)\n\n# Greetings to John Doe\ngreet('John Doe')|def greet(name):\n    print('Hello, ' + name)\n\n# Greetings to John Doe\ngreet('John Doe')",
+        "material": "Functions allow you to encapsulate code that can be reused throughout your program. They can take parameters and return values, helping to organize code into manageable pieces.\n\nIn this debugging exercise, you will analyze a code snippet that attempts to call a function without providing the necessary argument. This will help you understand the importance of function parameters and proper function usage."
+    },
+    {
+        "title": "Function Parameters and Return Values",
+        "description": "Write a function that takes two numbers and returns the result of raising the first number to the power of the second. If only one number is provided, square it.",
+        "type": "code",
+        "code_template": "def pow(base, exponent=2):\n    # Return base raised to the exponent\n\nprint(pow(3, 4))",
+        "code_result": "pow(3,4) #81\npow(3) #9\npow(3,0) #1\npow(0) #0",
+        "material": "Understanding how to define functions with parameters and return values is crucial for creating modular code. Functions can take inputs, process them, and return outputs, which allows for better organization and reusability.\n\nIn this task, you will create a function that raises a number to a given power. If only one argument is provided, it will square the number. This exercise will reinforce your understanding of function parameters and default values."
+    },
+    {
+        "title": "Variable Scope",
+        "description": "Use drag and drop to illustrate local and global variable handling.",
+        "type": "drag & drop",
+        "drag_drop_items": "global_var = 10\ndef my_function():\n    local_var = 5\n    return local_var + global_var",
+        "material": "Variable scope determines the visibility of a variable within different parts of your code. Global variables are accessible throughout the program, while local variables are limited to the function in which they are defined.\n\nIn this task, you will use drag and drop elements to arrange code that demonstrates both local and global variable handling. Understanding variable scope is essential for effective coding practices."
+    },
+    {
+        "title": "Introduction to Modules",
+        "description": "Which one is the correct?",
+        "type": "quiz",
+        "quiz_question": "How do you import the math module in Python?",
+        "quiz_options": "import math\ninclude math\nusing math\nrequire math",
+        "quiz_answer": "import math",
+        "material": "Modules are files containing Python code that can define functions, classes, and variables. They allow you to organize your code and reuse it across different programs. You can import a module into your script to access its functions and classes.\n\nIn this quiz, you will test your knowledge on how to correctly import and use modules in Python."
+    },
+    {
+        "title": "Handling Exceptions with try-except",
+        "description": "Use drag and drop to demonstrate exception handling in Python.",
+        "type": "drag & drop",
+        "drag_drop_items": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print('Error: Cannot divide by zero.')\nprint('Continuing with normal execution...')",
+        "material": "Exception handling is an essential concept in programming that allows you to manage errors gracefully. In Python, you can use try-except blocks to handle exceptions that may arise during program execution.\n\nIn this task, you will use drag and drop elements to arrange code that illustrates how to handle exceptions effectively. Understanding exception handling is critical for building robust and user-friendly applications."
+    },
+    {
+        "title": "Reading from Files",
+        "description": "Write a function that reads and returns the content of 'readingFrom.txt' from the root directory.",
+        "type": "code",
+        "code_template": "def read_file():\n    # Open 'readingFrom.txt' for reading\n    # Read its contents\n\nprint(read_file())",
+        "code_result": "read_file() #You successfully read the content of 'readingFrom.txt'!|Congratulations!",
+        "material": "Reading from files is an essential part of programming in Python. The `open()` function allows you to access files in various modes, such as reading ('r'), writing ('w'), and appending ('a'). Understanding how to handle files properly will enable you to manage data more effectively.\n\nIn this task, you will create a function that opens 'readingFrom.txt' in the root directory, reads its contents, and prints them to the output. This exercise will reinforce your understanding of file operations in Python."
+    },
+    {
+        "title": "Writing to Files",
+        "description": "Debug the following code that writes to a file.",
+        "type": "debugging",
+        "debugging_code": "file = open('output.txt')\nfile.write('Hello, World!')\nfile.close()",
+        "correct_code": "file = open('output.txt', 'w')\nfile.write('Hello, World!')\nfile.close()",
+        "material": "Writing to files allows you to store data permanently, making it accessible for future use. The `open()` function can be used to create or overwrite files, and the `write()` method is used to add content. Properly closing files after operations is crucial to prevent data loss and corruption.\n\nIn this debugging task, you will correct an issue in code that writes to a file but fails to close it properly. Understanding file writing operations is key to effective data management."
+    },
+    {
+        "title": "Iterating Through Files",
+        "description": "Use drag and drop to illustrate how to iterate through lines in a file.",
+        "type": "drag & drop",
+        "drag_drop_items": "def iterate_through_file():\n    with open('readingFrom.txt', 'r') as file:\n        for line in file:\n            print(line.strip())\n\niterate_through_file()",
+        "material": "Iterating through files allows you to process each line or piece of data systematically. In Python, you can use loops to read files line by line, which is useful for handling large files or extracting specific data.\n\nIn this task, you will arrange the steps needed to iterate through a file and print its contents using drag and drop elements, reinforcing your understanding of file handling."
+    },
+    {
+        "title": "Introduction to Object-Oriented Programming",
+        "description": "Match the terms with their definitions in object-oriented programming.",
+        "type": "matching",
+        "matching_pairs": "Class: A blueprint for creating objects.\nObject: An instance of a class.\nEncapsulation: Bundling data and methods that operate on that data.\nInheritance: The ability of a class to inherit attributes and methods from another class.",
+        "material": "Object-oriented programming (OOP) is a programming paradigm based on the concept of 'objects', which can contain data in the form of fields (attributes) and code in the form of procedures (methods). OOP allows for better organization and modularity in code, making it easier to maintain and extend.\n\nIn this task, you will match OOP terms with their definitions to enhance your understanding of fundamental concepts in object-oriented programming."
+    },
+    {
+        "title": "Creating Classes and Objects",
+        "description": "Use drag and drop to demonstrate how to create classes and objects.",
+        "type": "drag & drop",
+        "drag_drop_items": "class MyClass:\n    def __init__(self, attribute):\n        self.attribute = attribute\n\nmy_object = MyClass('Hello, World!')\nprint(my_object.attribute)",
+        "material": "Creating classes and objects is a core aspect of object-oriented programming. Classes define the structure and behavior of objects, while objects are specific instances of classes. Understanding how to create and use classes effectively is essential for building complex applications.\n\nIn this task, you will arrange the steps involved in creating classes and objects using drag and drop elements."
+    },
+    {
+        "title": "Class Constructors and the init Method",
+        "description": "Choose the correct answer.",
+        "type": "quiz",
+        "quiz_question": "What is the purpose of the __init__ method in a class?",
+        "quiz_options": "It initializes the class attributes when an object is created.\nIt is a method that is called when the class is defined.\nIt creates a new class.\nIt defines a method to print class information.",
+        "quiz_answer": "It initializes the class attributes when an object is created.",
+        "material": "The `__init__` method in Python classes is a special method known as the constructor. It is automatically called when a new instance of a class is created and is used to initialize the attributes of the class.\n\nIn this quiz, you will test your understanding of class constructors and their purpose in object-oriented programming."
+    },
+    {
+        "title": "Instance Variables and Methods",
+        "description": "Use drag and drop to illustrate the use of instance variables and methods in a class.",
+        "type": "drag & drop",
+        "drag_drop_items": "class MyClass:\n    def __init__(self, value):\n        self.value = value\n\n    def display_value(self):\n        print(self.value)\n\nmy_object = MyClass('Hello, World!')\nmy_object.display_value()",
+        "material": "Instance variables are unique to each object and are defined within a class. Instance methods operate on these variables, providing functionality and behavior to the objects created from the class.\n\nIn this task, you will arrange the steps involved in using instance variables and methods effectively using drag and drop elements."
+    },
+    {
+        "title": "Inheritance in Python",
+        "description": "Use drag and drop on the following code that attempts to demonstrate inheritance between classes.",
+        "type": "drag & drop",
+        "drag_drop_items": "class Animal:\n    def sound(self):\n        return 'Some sound'\nclass Dog(Animal):\n    def bark(self):\n        return 'Woof!'\n\ndog = Dog()\nprint('Dog can bark: ' + dog.bark() + ',but he has other sounds as well: ' + dog.sound())",
+        "material": "Inheritance allows one class to inherit attributes and methods from another, promoting code reuse and a hierarchical class structure. This concept is a fundamental part of object-oriented programming.\n\nIn this drag and drop task, you will analyze a code snippet that demonstrates inheritance and ensure it works correctly, enhancing your understanding of how inheritance is implemented in Python."
+    },
+    {
+        "title": "Polymorphism and Method Overriding",
+        "description": "Do you know which one is correct?",
+        "type": "quiz",
+        "quiz_question": "What is method overriding in object-oriented programming?",
+        "quiz_options": "When a subclass provides a specific implementation of a method already defined in its superclass.\nWhen two methods in the same class have the same name.\nWhen a method returns different types based on input.\nWhen a method is not defined in the class.",
+        "quiz_answer": "When a subclass provides a specific implementation of a method already defined in its superclass.",
+        "material": "Polymorphism allows methods to do different things based on the object it is acting upon, while method overriding enables a subclass to provide a specific implementation for a method already defined in its superclass. Both concepts are key aspects of object-oriented programming, promoting flexibility and reusability in code.\n\nIn this quiz, you will test your knowledge of polymorphism and method overriding."
+    }
+]

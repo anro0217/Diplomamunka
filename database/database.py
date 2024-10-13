@@ -528,10 +528,11 @@ class DatabaseManager:
 
         c.execute("SELECT task_id, status, failures FROM user_tasks WHERE user_id = ?", (user_id,))
         results = c.fetchall()
+        c.execute("SELECT COUNT(*) FROM tasks")
+        total_tasks = c.fetchone()[0]
         conn.close()
 
         # Összesített statisztikák kiszámítása
-        total_tasks = len(results)  # Az összes feladat
         completed_tasks = sum(1 for task in results if task[1] == 1)  # Teljesített feladatok
         total_failures = sum(task[2] for task in results)  # Összes hiba
 

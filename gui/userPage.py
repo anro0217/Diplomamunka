@@ -244,7 +244,7 @@ class UserWindow(FramelessWindow):
         if task_type == 'code':
             self.task_area.setCurrentWidget(self.code_runner)
             self.code_runner.load_task(task_data, self.user_id)
-        elif task_type == 'drag_and_drop':
+        elif task_type == 'drag & drop':
             self.task_area.setCurrentWidget(self.drag_and_drop_task)
             self.drag_and_drop_task.load_task(task_data, self.user_id)
         elif task_type == 'matching':
@@ -282,8 +282,8 @@ class UserWindow(FramelessWindow):
                     else:
                         self.load_task_area(task_data)
                     return
-
-        QMessageBox.information(self, "Done", "You have completed all tasks!")
+        if False: #TODO: Ez csak akkor jöjjön fel, ha tényleg mindegyik kész!
+            QMessageBox.information(self, "Done", "You have completed all tasks!")
 
     def setFontSize(self, size):
         self.font_size = size

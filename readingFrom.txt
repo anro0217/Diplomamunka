@@ -1,0 +1,2 @@
+You successfully read the content of 'readingFrom.txt'!
+Congratulations!

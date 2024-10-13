@@ -4,17 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Last fixes and updates">
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="All task types work correctly">
+      <change afterPath="$PROJECT_DIR$/database/tasks_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/uploadToDatabase.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/readingFrom.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tananyag" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/application.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/adminPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adminPage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codeDebuggingTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/codingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/task_types/quizTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/statisticsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/statisticsPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/widgets/databaseViewer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +43,7 @@
     <setting file="file://$PROJECT_DIR$/main.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -64,6 +68,7 @@
     "Python.reg_template.executor": "Run",
     "Python.registrationPage.executor": "Run",
     "Python.test.executor": "Run",
+    "Python.uploadToDatabase.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
@@ -74,11 +79,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\HP\Desktop\Diplomamunka\database" />
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\images" />
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\utils" />
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\widgets" />
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\task_types" />
-      <recent name="C:\Users\HP\Desktop\Diplomamunka\resources" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main">
@@ -235,7 +240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728505601666</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="All task types work correctly">
+      <option name="closed" value="true" />
+      <created>1728584373492</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1728584373492</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -270,22 +283,11 @@
     <MESSAGE value="Added task types and advanced admin page" />
     <MESSAGE value="Now it remembers to the solved tasks by an user" />
     <MESSAGE value="Last fixes and updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Last fixes and updates" />
+    <MESSAGE value="All task types work correctly" />
+    <option name="LAST_COMMIT_MESSAGE" value="All task types work correctly" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/gui/adminPage.py</url>
-          <line>96</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/gui/adminPage.py</url>
-          <line>27</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
