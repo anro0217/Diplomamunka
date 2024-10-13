@@ -27,11 +27,14 @@ class DragAndDropTask(QWidget):
         self.task_data = task_data
         self.user_id = user_id
         self.list_widget.clear()
-        items = task_data['drag_drop_items'].split('\n')
-        self.correct_order = items[:]  # Tároljuk a helyes sorrendet
 
-        # Keverjük össze az elemek sorrendjét
+        correct_orders = task_data['drag_drop_items'].split('|')
+        self.correct_orders = [order.split('\n') for order in
+                               correct_orders]
+
+        items = self.correct_orders[0][:]
         random.shuffle(items)
+
         for item in items:
             list_item = QListWidgetItem(item)
             self.list_widget.addItem(list_item)
@@ -39,7 +42,8 @@ class DragAndDropTask(QWidget):
     def check_order(self):
         user_order = [self.list_widget.item(i).text() for i in range(self.list_widget.count())]
 
-        if user_order == self.correct_order:
+        # Ellenőrizzük, hogy a felhasználó sorrendje szerepel-e a helyes sorrendek között
+        if user_order in self.correct_orders:
             QMessageBox.information(self, "Correct", "Your solution is correct!")
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.mark_task_as_completed(self.user_id, self.task_data['id'])

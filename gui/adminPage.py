@@ -51,13 +51,16 @@ class AdminWindow(FramelessWindow):
         self.code_result_input = QTextEdit()
         self.code_result_input.setMaximumHeight(100)
         self.code_result_input.setPlaceholderText("Enter the code result here")
-        self.add_help_icon(self.code_result_input, "[function](val1, val2) #[expected result here]\n"
-                                                   "[function](val3, val4) #[expected result here]\netc.")
+        self.add_help_icon(self.code_result_input, "[function_name](val1, val2) #[expected result here]\n"
+                                                   "[function_name](val3, val4) #[expected result here]\netc.\n\n!! "
+                                                   "If the expected result would contain '\\n', then replace it with "
+                                                   "'|' !!")
 
         self.drag_drop_input = QTextEdit()
         self.drag_drop_input.setMaximumHeight(100)
         self.drag_drop_input.setPlaceholderText("Enter drag & drop items here")
-        self.add_help_icon(self.drag_drop_input, "Code snippet with draggable items.\nLines will be mixed up.")
+        self.add_help_icon(self.drag_drop_input, "Code snippet with draggable items.\nLines will be mixed "
+                                                 "up.\n\nSeparate correct sollutions with '|'")
 
         self.matching_input = QTextEdit()
         self.matching_input.setMaximumHeight(100)
@@ -89,7 +92,8 @@ class AdminWindow(FramelessWindow):
         self.correct_code_input.setMaximumHeight(100)
         self.correct_code_input.setPlaceholderText("Enter the correct code here")
         self.add_help_icon(self.correct_code_input, "Code snippet without errors.\nUse tabs and indentations as "
-                                                    "necessary.")
+                                                    "necessary.\nIf there is more than one correct solution, separate "
+                                                    "them with '///'.")
 
         # Tananyag szövegmező létrehozása, kezdetben elrejtve
         self.material_input = QTextEdit()
@@ -281,7 +285,7 @@ class AdminWindow(FramelessWindow):
         task_type = self.task_type_selector.currentText()
         self.code_template_input.setVisible(task_type == "code")
         self.code_result_input.setVisible(task_type == "code")
-        self.drag_drop_input.setVisible(task_type == "drag_and_drop")
+        self.drag_drop_input.setVisible(task_type == "drag & drop")
         self.matching_input.setVisible(task_type == "matching")
         self.quiz_question_input.setVisible(task_type == "quiz")
         self.quiz_options_input.setVisible(task_type == "quiz")
@@ -308,7 +312,7 @@ class AdminWindow(FramelessWindow):
         material = self.material_input.toPlainText().strip()
         code_template = self.code_template_input.toPlainText().strip() if task_type == "code" else None
         code_result = self.code_result_input.toPlainText().strip() if task_type == "code" else None
-        drag_drop_items = self.drag_drop_input.toPlainText().strip() if task_type == "drag_and_drop" else None
+        drag_drop_items = self.drag_drop_input.toPlainText().strip() if task_type == "drag & drop" else None
         matching_pairs = self.matching_input.toPlainText().strip() if task_type == "matching" else None
         quiz_question = self.quiz_question_input.toPlainText().strip() if task_type == "quiz" else None
         quiz_options = self.quiz_options_input.toPlainText().strip() if task_type == "quiz" else None
@@ -319,7 +323,7 @@ class AdminWindow(FramelessWindow):
         required_fields = [title, material, description]
         if task_type == "code":
             required_fields.extend([code_template, code_result])
-        elif task_type == "drag_and_drop":
+        elif task_type == "drag & drop":
             required_fields.append(drag_drop_items)
         elif task_type == "matching":
             required_fields.append(matching_pairs)
@@ -404,7 +408,7 @@ class AdminWindow(FramelessWindow):
             if record['type'] == 'code':
                 self.code_template_input.setPlainText(record['code_template'])
                 self.code_result_input.setPlainText(record['code_result'])
-            elif record['type'] == 'drag_and_drop':
+            elif record['type'] == 'drag & drop':
                 self.drag_drop_input.setPlainText(record['drag_drop_items'])
             elif record['type'] == 'matching':
                 self.matching_input.setPlainText(record['matching_pairs'])
@@ -415,9 +419,6 @@ class AdminWindow(FramelessWindow):
             elif record['type'] == 'debugging':
                 self.debugging_code_input.setPlainText(record['debugging_code'])
                 self.correct_code_input.setPlainText(record['correct_code'])
-
-            # Any additional setup required for editing can go here
-
         else:
             QMessageBox.warning(self, "No Record Selected", "Please select a record for editing.")
 

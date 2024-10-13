@@ -15,9 +15,9 @@ class QuizTask(QWidget):
         self.layout.addWidget(self.question)
 
         self.button_group = QButtonGroup()
-        self.option_buttons = []
+        self.option_buttons = []  # List to store the option buttons
 
-        # Create radio buttons for options
+        # Create a radio button for each possible option (up to 4)
         for _ in range(4):
             radio_button = QRadioButton()
             self.layout.addWidget(radio_button)
@@ -46,11 +46,15 @@ class QuizTask(QWidget):
         # Shuffle options
         random.shuffle(options)
 
-        # Set the options to the radio buttons
-        for i, option in enumerate(options):
+        # Set the options to the radio buttons based on the number of options
+        for i in range(len(options)):
             if i < len(self.option_buttons):  # Limit to the number of radio buttons
-                self.option_buttons[i].setText(option)
+                self.option_buttons[i].setText(options[i])
                 self.option_buttons[i].setVisible(True)
+
+        # Hide the radio buttons if there are fewer options
+        for j in range(len(options), len(self.option_buttons)):
+            self.option_buttons[j].setVisible(False)
 
     def check_answer(self):
         selected_button = self.button_group.checkedButton()
