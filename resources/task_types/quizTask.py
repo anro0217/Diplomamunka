@@ -17,8 +17,8 @@ class QuizTask(QWidget):
         self.button_group = QButtonGroup()
         self.option_buttons = []  # List to store the option buttons
 
-        # Create a radio button for each possible option (up to 4)
-        for _ in range(4):
+        # Create a radio button for each possible option (up to 10)
+        for _ in range(10):
             radio_button = QRadioButton()
             self.layout.addWidget(radio_button)
             self.button_group.addButton(radio_button)
