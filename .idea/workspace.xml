@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Added 38 lessons for python learning.">
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Last touch">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/application.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readingFrom.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/readingFrom.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/codingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/welcomePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/welcomePage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/tasks_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/database/tasks_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/quizTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +246,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728862719214</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Last touch">
+      <option name="closed" value="true" />
+      <created>1728895398336</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728895398336</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -285,7 +291,8 @@
     <MESSAGE value="Last fixes and updates" />
     <MESSAGE value="All task types work correctly" />
     <MESSAGE value="Added 38 lessons for python learning." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added 38 lessons for python learning." />
+    <MESSAGE value="Last touch" />
+    <option name="LAST_COMMIT_MESSAGE" value="Last touch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -214,7 +214,7 @@
         "description": "Which one is the correct?",
         "type": "quiz",
         "quiz_question": "How do you import the math module in Python?",
-        "quiz_options": "import math\ninclude math\nusing math\nrequire math",
+        "quiz_options": "import math\ninclude math\nusing math\nrequire math\nadd math\nmodule math",
         "quiz_answer": "import math",
         "material": "Modules are files containing Python code that can define functions, classes, and variables. They allow you to organize your code and reuse it across different programs. You can import a module into your script to access its functions and classes.\n\nIn this quiz, you will test your knowledge on how to correctly import and use modules in Python."
     },
