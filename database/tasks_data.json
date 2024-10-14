@@ -3,7 +3,7 @@
         "title": "Introduction to Python and Printing",
         "description": "Write a Python program that prints the message 'Hello World!'.",
         "type": "code",
-        "code_template": "def print_message():\n    # Overwrite this line!'\n\nprint_message()",
+        "code_template": "def print_message():\n    # Overwrite this line!\n\nprint_message()",
         "code_result": "print_message() #Hello World!",
         "material": "In this section, you will learn about the basics of Python programming. Python is a versatile and widely-used programming language, known for its simplicity and readability. One of the first things you will do in Python is to print output to the console. Printing is an essential part of programming, as it allows you to display messages, results, and data to users.\n\nTo print a message in Python, you will use the built-in function `print()`. This function takes a string (a sequence of characters) as an argument and outputs it to the screen. For example, to print 'Hello, World!', you would write `print('Hello, World!')`. This program will help you get familiar with the syntax of Python and understand how functions work."
     },
