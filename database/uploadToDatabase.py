@@ -3,7 +3,6 @@ from database import DatabaseManager
 
 
 def upload_tasks_to_database(db_file, json_file, update=False):
-    # Adatbázis inicializálása
     db = DatabaseManager(db_file)
 
     # JSON fájl beolvasása

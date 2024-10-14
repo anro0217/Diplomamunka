@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Update for quiz task - up to 10 answer options">
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Removing unnecessary files">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/application.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/tasks_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/database/tasks_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/uploadToDatabase.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/uploadToDatabase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login_state.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/login_state.cfg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +263,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728898675476</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Removing unnecessary files">
+      <option name="closed" value="true" />
+      <created>1728899000648</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1728899000648</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Removing unnecessary files">
+      <option name="closed" value="true" />
+      <created>1728899015349</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1728899015349</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -298,7 +318,8 @@
     <MESSAGE value="Added 38 lessons for python learning." />
     <MESSAGE value="Last touch" />
     <MESSAGE value="Update for quiz task - up to 10 answer options" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update for quiz task - up to 10 answer options" />
+    <MESSAGE value="Removing unnecessary files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removing unnecessary files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
