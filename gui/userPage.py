@@ -282,7 +282,10 @@ class UserWindow(FramelessWindow):
                     else:
                         self.load_task_area(task_data)
                     return
-        if False: #TODO: Ez csak akkor jöjjön fel, ha tényleg mindegyik kész!
+
+        all_tasks_completed = len(completed_tasks) == len(tasks)
+
+        if all_tasks_completed:
             QMessageBox.information(self, "Done", "You have completed all tasks!")
 
     def setFontSize(self, size):
