@@ -229,8 +229,7 @@ class UserWindow(FramelessWindow):
 
     def on_statistics_clicked(self):
         self.current_widget = self.task_area.currentWidget()
-        self.statistics_page.update_task_table()
-        self.statistics_page.update_statistics()
+        self.statistics_page.update_all()
         self.task_area.setCurrentWidget(self.statistics_page)
         self.toggle_lessons_dropdown()
 
