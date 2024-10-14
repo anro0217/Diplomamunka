@@ -58,6 +58,12 @@ class StatisticsPage(QWidget):
 
         self.setLayout(layout)
 
+    def update_all(self):
+        if self.user_id != self.parent_window.user_id:
+            self.user_id = self.parent_window.user_id
+        self.update_task_table()
+        self.update_statistics()
+
     def update_task_table(self):
         # Lekérdezzük a felhasználó feladatait az adatbázisból
         user_tasks = self.db_manager.get_user_tasks(self.user_id)

@@ -7,9 +7,9 @@
     <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Removing unnecessary files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/application.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/tasks_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/database/tasks_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/uploadToDatabase.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/uploadToDatabase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login_state.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/login_state.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login_state.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/statisticsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/statisticsPage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -279,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728899015349</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Removing unnecessary files">
+      <option name="closed" value="true" />
+      <created>1728918152432</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1728918152432</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="UnknownFeatures">
