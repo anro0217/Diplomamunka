@@ -1,4 +1,5 @@
 import builtins
+import os
 import sys
 from contextlib import redirect_stdout
 from io import StringIO
@@ -179,11 +180,21 @@ class CodeEditor(QPlainTextEdit):
         self.highlight_current_line(is_dark_mode)
 
 
-def safe_open(filename):
-    # Allow only reading from 'readingFrom.txt'
+def safe_open(filename, mode='r'):
+    # Get the directory of the current file
+    base_path = os.path.dirname(__file__)
+
+    # Allow only reading mode and only 'readingFrom.txt'
     if filename != 'readingFrom.txt':
-        return None, "Unauthorized file access attempt!"
-    return open(filename, 'r')
+        raise ValueError("Unauthorized file access attempt!")
+
+    if mode != 'r':
+        raise ValueError("Only reading mode ('r') is allowed!")
+
+    # Construct the full path to the 'readingFrom.txt' file
+    file_path = os.path.join(base_path, filename)
+
+    return open(file_path, mode)
 
 
 class CodeRunner(QWidget):
@@ -229,9 +240,6 @@ class CodeRunner(QWidget):
             QMessageBox.warning(self, "Incorrect", message)
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
-
-    from io import StringIO
-    from contextlib import redirect_stdout
 
     def test_user_code(self, code_editor_input, test_cases):
         # 1. Check if only the function body was modified
@@ -290,8 +298,6 @@ class CodeRunner(QWidget):
 
                     if actual_output == expected_output.replace('|', '\n'):
                         passed_tests += 1
-                    else:
-                        print("-----\nKimenet:\n" + actual_output + "\nElvárt kimenet:\n" + expected_output.replace('|', '\n'))
                 except Exception:
                     continue  # Test fails if any exception occurs
 
