@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Last touch">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/application.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/tasks_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/database/tasks_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/quizTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/quizTask.py" afterDir="false" />
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Update for quiz task - up to 10 answer options">
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,7 +251,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728895398336</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Update for quiz task - up to 10 answer options">
+      <option name="closed" value="true" />
+      <created>1728898675476</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1728898675476</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -292,7 +297,8 @@
     <MESSAGE value="All task types work correctly" />
     <MESSAGE value="Added 38 lessons for python learning." />
     <MESSAGE value="Last touch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Last touch" />
+    <MESSAGE value="Update for quiz task - up to 10 answer options" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update for quiz task - up to 10 answer options" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
