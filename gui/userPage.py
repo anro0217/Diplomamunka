@@ -67,6 +67,16 @@ class UserWindow(FramelessWindow):
 
         self.check_icon = QIcon('resources/images/check_icon.png')
 
+        # Message box - completed
+        self.msg_box = QMessageBox(self)
+        self.msg_box.setWindowTitle("Done")
+        self.msg_box.setText("Congratulations!\nYou have completed all tasks!")
+        self.msg_box.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
+        ok_button = self.msg_box.button(QMessageBox.Ok)
+        ok_button.setText("Show Statistics")
+        cancel_button = self.msg_box.button(QMessageBox.Cancel)
+        cancel_button.setText("Close")
+
         # Layout for the top row (lessons button, lesson title, user label, user menu button)
         user_layout = QHBoxLayout()
         user_layout.addWidget(self.lessons_button)
@@ -109,7 +119,7 @@ class UserWindow(FramelessWindow):
         self.drag_and_drop_task = DragAndDropTask(self.db_manager, parent=self)
         self.task_area.addWidget(self.drag_and_drop_task)
 
-        self.matching_task = MatchingTask(self.db_manager, parent=self)
+        self.matching_task = MatchingTask(self.db_manager, self.user_id, parent=self)
         self.task_area.addWidget(self.matching_task)
 
         self.quiz_task = QuizTask(self.db_manager, parent=self)
@@ -285,7 +295,12 @@ class UserWindow(FramelessWindow):
         all_tasks_completed = len(completed_tasks) == len(tasks)
 
         if all_tasks_completed:
-            QMessageBox.information(self, "Done", "You have completed all tasks!")
+            self.current_widget = self.task_area.currentWidget()
+            self.statistics_page.update_all()
+
+            result = self.msg_box.exec_()
+            if result == QMessageBox.Ok:
+                self.task_area.setCurrentWidget(self.statistics_page)
 
     def setFontSize(self, size):
         self.font_size = size
@@ -306,6 +321,7 @@ class UserWindow(FramelessWindow):
         self.task_area.setStyleSheet(f"font-size: {size}pt;")
         self.statistics_page.set_font_size(size)
         self.code_runner.set_font_size(size)
+        self.msg_box.setStyleSheet(f"font-size: {size}pt;")
 
         if self.user_id is not None:
             self.db_manager.save_user_settings(self.user_id, None, size)
@@ -325,6 +341,8 @@ class UserWindow(FramelessWindow):
             self.check_icon = QIcon('resources/images/check_icon.png')
             self.lessons_button.setIcon(QIcon('resources/images/menu_icon.png'))
 
+        self.update_lessons_list()
+        self.matching_task.set_theme(darkModeEnabled)
         self.code_runner.set_theme(darkModeEnabled)
         self.statistics_page.set_theme(darkModeEnabled)
         self.speech_bubble.updateTheme(darkModeEnabled)

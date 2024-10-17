@@ -17,7 +17,6 @@ class DragAndDropTask(QWidget):
         self.list_widget.setDragDropMode(QListWidget.InternalMove)
 
         self.check_button = QPushButton("Check Order", self)
-        #self.check_button.setFixedSize(100, 30)
         self.check_button.clicked.connect(self.check_order)
         layout.addWidget(self.check_button)
 

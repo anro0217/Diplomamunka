@@ -6,6 +6,7 @@ from gui.adminPage import AdminWindow
 from gui.registrationPage import RegistrationWindow
 from gui.userPage import UserWindow
 from resources.utils import loginUtils
+from resources.utils.loginUtils import config_file_path
 from resources.utils.globalSignals import globalSignals
 from resources.widgets.myPasswordField import PasswordLineEdit
 from resources.widgets.mySlider import ClickableSlider
@@ -94,7 +95,7 @@ class LoginWindow(FramelessPage):
 
     def check_auto_login(self):
         try:
-            with open('login_state.cfg', 'r', encoding='utf-8') as f:
+            with open(config_file_path, 'r', encoding='utf-8') as f:
                 username = f.read().strip()
                 if username and '\u200B' in username:
                     username = username.replace('\u200B', '')
@@ -149,6 +150,7 @@ class LoginWindow(FramelessPage):
         self.create_windows(user_id, False)
         self.user_window.set_user_label(username_or_email)
         self.settings_window.hide()
+        self.user_window.task_area.setCurrentWidget(self.user_window.welcome_page)
         self.user_window.show()
 
     def login_as_admin(self, username_or_email, password):
