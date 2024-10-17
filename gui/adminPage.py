@@ -516,8 +516,5 @@ class AdminWindow(FramelessWindow):
 
     def switch_to_user_view(self):
         self.hide()
+        self.user_window.task_area.setCurrentWidget(self.user_window.welcome_page)
         self.user_window.show()
-
-    def switch_to_admin_view(self):
-        self.user_window.hide()
-        self.show()

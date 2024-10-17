@@ -3,29 +3,56 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPainter, QPen, QCursor
 import random
 
+
 class ConnectionPoint(QPushButton):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, db_manager, user_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setFixedSize(20, 20)
-        self.setStyleSheet("background-color: black; border-radius: 10px;")
-        self.connected_line = None  # Tárolja a csatlakoztatott vonalat
+        self.db_manager = db_manager
+        self.user_id = user_id
+        self.dark_theme = False
+        self.connected_line = None
+        self.load_user_theme()
 
     def enterEvent(self, event):
-        self.setStyleSheet("background-color: red; border-radius: 10px;")
+        hover_color = "darkred" if self.dark_theme else "red"
+        self.setStyleSheet(f"background-color: {hover_color}; border-radius: 10px;")
 
     def leaveEvent(self, event):
-        self.setStyleSheet("background-color: black; border-radius: 10px;")
+        self.update_color()
+
+    def update_color(self):
+        color = "white" if self.dark_theme else "black"
+        self.setStyleSheet(f"background-color: {color}; border-radius: 10px;")
+
+    def load_user_theme(self):
+        settings = self.db_manager.load_user_settings(self.user_id)
+        if settings:
+            theme = settings.get('theme')
+
+            if theme is not None:
+                self.setTheme(theme == 'dark')
+            else:
+                self.setTheme(False)
+
+    def setTheme(self, dark_theme):
+        self.dark_theme = dark_theme
+        self.update_color()
+
 
 class Line:
     def __init__(self, start, end):
         self.start = start
         self.end = end
 
+
 class MatchingTask(QWidget):
-    def __init__(self, db_manager, parent=None):
+    def __init__(self, db_manager, user_id, parent=None):
         super().__init__(parent)
         self.db_manager = db_manager
+        self.user_id = user_id
         self.parent_window = parent
+        self.dark_theme = False
         self.initUI()
 
     def initUI(self):
@@ -40,12 +67,12 @@ class MatchingTask(QWidget):
         self.current_line = None
         self.drawing = False
         self.fixed_point = None
+        self.line_color = Qt.black
 
         spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.layout.addItem(spacer)
 
         self.check_button = QPushButton("Check Pairs", self)
-        #self.check_button.setFixedSize(100, 30)
         self.check_button.clicked.connect(self.check_pairs)
         self.layout.addWidget(self.check_button, alignment=Qt.AlignBottom)
 
@@ -65,13 +92,13 @@ class MatchingTask(QWidget):
         for i, item in enumerate(left_items):
             label = QLabel(item)
             self.grid_layout.addWidget(label, i, 0, alignment=Qt.AlignRight)
-            point = ConnectionPoint()
+            point = ConnectionPoint(self.db_manager, self.user_id)
             point.mousePressEvent = self.create_mouse_press_event_handler(point)
             self.left_points.append((point, item))
             self.grid_layout.addWidget(point, i, 1, alignment=Qt.AlignLeft)
 
         for i, item in enumerate(right_items):
-            point = ConnectionPoint()
+            point = ConnectionPoint(self.db_manager, self.user_id)
             point.mousePressEvent = self.create_mouse_press_event_handler(point)
             self.right_points.append((point, item))
             self.grid_layout.addWidget(point, i, 2, alignment=Qt.AlignRight)
@@ -166,7 +193,7 @@ class MatchingTask(QWidget):
     def paintEvent(self, event):
         super().paintEvent(event)
         painter = QPainter(self)
-        pen = QPen(Qt.black, 2)
+        pen = QPen(self.line_color, 2)
         painter.setPen(pen)
         for line in self.lines:
             if line.start and line.end:
@@ -204,3 +231,18 @@ class MatchingTask(QWidget):
             QMessageBox.warning(self, "Incorrect", "Your solution is incorrect.")
             if self.parent_window and not self.parent_window.is_admin:
                 self.db_manager.increment_failure_count(self.user_id, self.task_data['id'])
+
+    def set_theme(self, dark_theme):
+        self.dark_theme = dark_theme
+        if self.dark_theme:
+            self.line_color = Qt.white
+        else:
+            self.line_color = Qt.black
+
+        for point, _ in self.left_points:
+            point.setTheme(self.dark_theme)
+
+        for point, _ in self.right_points:
+            point.setTheme(self.dark_theme)
+
+        self.update()

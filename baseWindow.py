@@ -39,7 +39,6 @@ class FramelessWindow(QMainWindow):
 
         self.user_menu = QMenu()
         self.user_menu_button.setMenu(self.user_menu)
-        self.profile_action = QAction("Profile", self)
         self.settings_action = QAction("Settings", self)
         self.settings_action.triggered.connect(self.open_settings_window)
         self.sign_out_action = QAction("Sign Out", self)
@@ -47,7 +46,7 @@ class FramelessWindow(QMainWindow):
         self.exit_action = QAction("Exit", self)
         self.exit_action.triggered.connect(QApplication.instance().quit)
 
-        self.user_menu.addActions([self.settings_action, self.sign_out_action, self.profile_action, self.exit_action])
+        self.user_menu.addActions([self.settings_action, self.sign_out_action, self.exit_action])
 
         self.user_menu_button.installEventFilter(self)
 

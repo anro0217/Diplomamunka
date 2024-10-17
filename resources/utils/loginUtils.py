@@ -1,6 +1,16 @@
 import os
 import re
 import bcrypt
+import sys
+
+# Futtatási könyvtár meghatározása (ahonnan az exe fut)
+if getattr(sys, 'frozen', False):
+    application_path = os.path.dirname(sys.executable)  # Az exe futtatási könyvtára
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))  # Fejlesztési környezet
+
+# A login_state.cfg elérési útja
+config_file_path = os.path.join(application_path, 'login_state.cfg')
 
 def is_valid_email(email):
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -27,12 +37,12 @@ def is_email(string):
     return "@" in string and "." in string
 
 def save_login_state(username):
-    with open('login_state.cfg', 'w', encoding='utf-8') as f:
+    with open(config_file_path, 'w', encoding='utf-8') as f:
         username = '\u200B'.join(username)
         f.write(username)
 
 def delete_login_state():
     try:
-        os.remove('login_state.cfg')
+        os.remove(config_file_path)
     except FileNotFoundError:
         pass
