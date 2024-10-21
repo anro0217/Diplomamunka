@@ -45,7 +45,7 @@ class SettingsWindow(QWidget):
         mainLayout.addLayout(fontSizeLayout)
 
         self.fontSizeSlider.valueChanged.connect(lambda _:
-                                                 globalSignals.fontSizeChanged.emit(self.fontSizeSlider.getValue()))
+                                                     globalSignals.fontSizeChanged.emit(self.fontSizeSlider.getValue()))
         #self.theme_switch.clicked.connect(lambda _: globalSignals.themeChanged.emit(self.theme_switch.isChecked()))
 
         self.theme_switch.clicked.connect(self.handleThemeSwitch)
