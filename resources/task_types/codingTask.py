@@ -129,16 +129,6 @@ class CodeEditor(QPlainTextEdit):
     def sizeHint(self):
         return QSize(self.line_number_area_width(), 0)
 
-    def run_code_and_capture_output(self):
-        code = self.toPlainText()
-        output = StringIO()
-        with redirect_stdout(output):
-            try:
-                exec(code, {})
-            except Exception as e:
-                print(str(e), file=sys.stderr)
-        return output.getvalue()
-
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Tab:
             cursor = self.textCursor()
@@ -248,11 +238,7 @@ class CodeRunner(QWidget):
 
         # Check the function header and the print statement at the end
         if user_code_lines[0] != template_lines[0] or user_code_lines[-1] != template_lines[-1]:
-            return False, "You cannot modify the function header or the print statement at the end!"
-
-        # Ensure that the function body has been modified (after the comment)
-        if user_code_lines[1] == template_lines[1]:
-            return False, "You haven't modified the function body yet!"
+            return False, "You cannot modify the function header or the last line of the code!"
 
         # 2. Run the user's code and capture output
         output = StringIO()

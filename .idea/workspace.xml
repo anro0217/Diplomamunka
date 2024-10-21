@@ -4,17 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="Fixed user_id update on all page">
+    <list default="true" id="2264105d-0703-4949-88ce-aae73f065657" name="Changes" comment="More fixes">
+      <change afterPath="$PROJECT_DIR$/asd.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/baseWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/application.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/application.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/adminPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adminPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/loginPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/loginPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/userPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/userPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/dragAndDropTask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/matchingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/matchingTask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/task_types/welcomePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/welcomePage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/utils/loginUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/utils/loginUtils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/settingsPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/settingsPage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/task_types/codingTask.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/task_types/codingTask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/utils/globalSignals.py" beforeDir="false" afterPath="$PROJECT_DIR$/resources/utils/globalSignals.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,27 +48,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.adminPage.executor": "Run",
-    "Python.asd.executor": "Run",
-    "Python.database.executor": "Run",
-    "Python.loginPage.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.mainPage.executor": "Run",
-    "Python.reg_template.executor": "Run",
-    "Python.registrationPage.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.uploadToDatabase.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/HP/Desktop/Diplomamunka",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.adminPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.asd.executor&quot;: &quot;Run&quot;,
+    &quot;Python.database.executor&quot;: &quot;Run&quot;,
+    &quot;Python.loginPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mainPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reg_template.executor&quot;: &quot;Run&quot;,
+    &quot;Python.registrationPage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.uploadToDatabase.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/Desktop/Diplomamunka&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\task_types" />
@@ -82,7 +78,7 @@
       <recent name="C:\Users\HP\Desktop\Diplomamunka\resources\widgets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Diplomamunka" />
       <option name="ENV_FILES" value="" />
@@ -300,7 +296,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728919782417</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="More fixes">
+      <option name="closed" value="true" />
+      <created>1729177735337</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1729177735337</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -341,7 +345,8 @@
     <MESSAGE value="Update for quiz task - up to 10 answer options" />
     <MESSAGE value="Removing unnecessary files" />
     <MESSAGE value="Fixed user_id update on all page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed user_id update on all page" />
+    <MESSAGE value="More fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="More fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
